@@ -8,14 +8,21 @@
 
 
 class UListDataObject_Base;	
+class UWidget_ListEntry_Base;
+
+
 
 UCLASS()
 class PROJECT_IX_API UDataAsset_DataListEntryMapping : public UDataAsset
 {
 	GENERATED_BODY()
 	
+public:
+	TSubclassOf<UWidget_ListEntry_Base> FindEntryWidgetClassByDataObject(UListDataObject_Base* InDataObject) const;
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "DataListEntryMapping")
-	TMAP<TSubclassOf<UListDataObject_Base>, TSubclassOf
+	TMap<TSubclassOf<UListDataObject_Base>, TSubclassOf<UWidget_ListEntry_Base>> DataObjectListEntryMap;
+
 };

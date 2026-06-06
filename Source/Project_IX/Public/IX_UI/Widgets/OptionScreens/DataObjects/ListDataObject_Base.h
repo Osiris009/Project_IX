@@ -12,7 +12,7 @@
 	void Set##PropertyName(DataType In##PropertyName){PropertyName = In##PropertyName;}
 
 
-UCLASS()
+UCLASS(Abstract)
 class PROJECT_IX_API UListDataObject_Base : public UObject
 {
 	GENERATED_BODY()

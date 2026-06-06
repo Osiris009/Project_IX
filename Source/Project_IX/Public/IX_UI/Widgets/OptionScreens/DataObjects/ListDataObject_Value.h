@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECT_IX_API UListDataObject_Value : public UListDataObject_Base
 {
 	GENERATED_BODY()
