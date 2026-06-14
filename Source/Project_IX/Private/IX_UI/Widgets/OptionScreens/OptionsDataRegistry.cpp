@@ -42,17 +42,22 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 		
 		UListDataObject_String* GameDifficulty = NewObject<UListDataObject_String>();
 		GameDifficulty->SetDataID(FName("GameDifficulty"));
-		GameDifficulty->SetDataDisplayName(FText::FromString("Difficulty"));
+		GameDifficulty->SetDataDisplayName(FText::FromString(TEXT("Difficulty")));  
+		GameDifficulty->AddDynamicOption(TEXT("Easy"), FText::FromString(TEXT("Easy")));
+		GameDifficulty->AddDynamicOption(TEXT("Normal"), FText::FromString(TEXT("Normal")));
+		GameDifficulty->AddDynamicOption(TEXT("Hard"), FText::FromString(TEXT("Hard")));
+		GameDifficulty->AddDynamicOption(TEXT("VeryHard"), FText::FromString(TEXT("VeryHard")));
 		GameplayCollectionTab->AddChildListData(GameDifficulty);
+		
 	}
 
 	////TestingOption
-	//{
-	//	UListDataObject_String* TestingItem = NewObject<UListDataObject_String>();
-	//	TestingItem->SetDataID(FName("Testing"));
-	//	TestingItem->SetDataDisplayName(FText::FromString("Testing "));
-	//	GameplayCollectionTab->AddChildListData(TestingItem);
-	//}
+	{
+		UListDataObject_String* TestingItem = NewObject<UListDataObject_String>();
+		TestingItem->SetDataID(FName("Testing"));
+		TestingItem->SetDataDisplayName(FText::FromString(TEXT( "Testing ")));
+		GameplayCollectionTab->AddChildListData(TestingItem);
+	}
 
 	RegisteredOptionsTabCollections.Add(GameplayCollectionTab);
 }
