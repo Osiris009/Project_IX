@@ -42,37 +42,45 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 			)
 	);
 
+	// Bind the tab selection delegate once during initialization, BEFORE any tabs are registered.
+	// This ensures we catch the auto-selection that CommonUI fires during RegisterTab.
+	TabListWidget_OptionsTabs->OnTabSelected.AddDynamic(this, &ThisClass::OnOptionsTabSelected);
 }
 
 void UWidget_OptionsScreen::NativeOnActivated()
 {
 	Super::NativeOnActivated();
 
-	/*At this point, the options screen should have its data registry ready to go,
-	 so we can broadcast an event or call a function to notify any child widgets
-	 (like the options tabs) that they can now access the data registry and 
-	 get the data they need to populate themselves*/
-
+	FName FirstTabID = NAME_None;
 
 	for (UListDataObject_Collection* TabCollection : GetorCreateDataRegistry()->GetRegisteredOptionsTabCollections())
 	{
-		if (!TabCollection)
-		{
-			continue;
-		}
+		if (!TabCollection) continue;
+
 		const FName TabID = TabCollection->GetDataID();
 
-		if ( TabListWidget_OptionsTabs->GetTabButtonBaseByID(TabID) != nullptr)
+		if (TabListWidget_OptionsTabs->GetTabButtonBaseByID(TabID) != nullptr)
 		{
-			// Do something with the TabButton if needed
 			continue;
 		}
 
 		TabListWidget_OptionsTabs->RequestRegisterTab(TabID, TabCollection->GetDataDisplayName());
+
+		// Track the first registered tab
+		if (FirstTabID == NAME_None)
+		{
+			FirstTabID = TabID;
+		}
 	}
 
-	TabListWidget_OptionsTabs->OnTabSelected.AddDynamic(this, &ThisClass::OnOptionsTabSelected);
-
+	// Explicitly populate the list for the first tab.
+	// We call OnOptionsTabSelected directly because SetActiveTab may be a no-op 
+	// if CommonUI already considers this tab selected from RegisterTab's auto-selection.
+	if (FirstTabID != NAME_None)
+	{
+		//
+		OnOptionsTabSelected(FirstTabID);
+	}
 }
 
 UOptionsDataRegistry* UWidget_OptionsScreen::GetorCreateDataRegistry()
@@ -94,6 +102,7 @@ UOptionsDataRegistry* UWidget_OptionsScreen::GetorCreateDataRegistry()
 
 void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabID)
 {
+	Debug::Print(FString::Printf(TEXT("Options tab selected with ID: %s"), *TabID.ToString()));
 	TArray<UListDataObject_Base*> FoundListSourceItems = GetorCreateDataRegistry()->GetListSourceItemsBySelectedTabID(TabID);
 
 	CommonListView_OptionsList->SetListItems(FoundListSourceItems);

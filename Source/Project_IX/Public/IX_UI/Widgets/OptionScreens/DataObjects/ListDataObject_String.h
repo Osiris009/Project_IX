@@ -14,19 +14,29 @@ class PROJECT_IX_API UListDataObject_String : public UListDataObject_Value
 	GENERATED_BODY()
 	
 public:	
+
 	void AddDynamicOption(const FString& InStringValue, const FText InDisplayText);
+	// The function will try to find the InStringValue in the AvailableOptionStringArray, 
+	// if found, it will set the CurrentDisplayText to the corresponding text 
+	// in AvailableOptionTextArray and return true. If not found, it will return false and do nothing.
+	void AdvanceToNextOption();
+	void BackToPreviousOption();
 	
+
 protected:
-	
-	FString CurrentStringValue;
-	FText CurrentDisplayText;
-	
+
 	//~Form UListDataObject base
 	virtual void OnDataObjectInitialized() override;
 	
 	bool TrySetDisplayTextFromStringValue(const FString& InStringValue);
-	
+	FString CurrentStringValue;
+	FText CurrentDisplayText;
 	
 	TArray<FString> AvailableOptionStringArray;
 	TArray<FText> AvailableOptionTextArray;
+public:
+	//~Form UListDataObject base 
+	FORCEINLINE const TArray<FText>& GetAvailableOptionTextArray() const { return AvailableOptionTextArray;}
+	
+	FORCEINLINE FText GetCurrentDisplayText() const { return CurrentDisplayText; }
 };

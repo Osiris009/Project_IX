@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 namespace Debug
 {
 	static void Print(const FString& Msg, int32 InKey = -1, const FColor& InColor = FColor::MakeRandomColor())

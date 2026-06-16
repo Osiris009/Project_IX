@@ -3,8 +3,18 @@
 
 #include "IX_UI/Widgets/OptionScreens/ListEntries/Widget_ListEntry_String.h"
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_String.h"
+#include "IX_UI/Widgets/Components/PIXCommonRotator.h"
+#include "IX_UI/Widgets/Components/PIX_CommonButtonBase.h" 
 
+#include "ProjectDebugHelper.h"
 
+void UWidget_ListEntry_String::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	CommonButton_PreviousOption->OnClicked().AddUObject(this, &ThisClass::OnPreviousOptionButtonClicked);
+	CommonButton_NextOption->OnClicked().AddUObject(this, &ThisClass::OnNextOptionButtonClicked);
+}
 
 void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
@@ -12,6 +22,33 @@ void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* I
 	
 	CachedOwningStringDataObject = CastChecked<UListDataObject_String>(InOwningListDataObject);
 	
+	CommonRotator_AvailableOptions->PopulateTextLabels(CachedOwningStringDataObject->GetAvailableOptionTextArray());
 	
-	
+	CommonRotator_AvailableOptions->SetSelectiveOptionByText(CachedOwningStringDataObject->GetCurrentDisplayText());
+}
+
+void UWidget_ListEntry_String::OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason)
+{
+	if (CachedOwningStringDataObject)
+	{
+		CommonRotator_AvailableOptions->SetSelectiveOptionByText(CachedOwningStringDataObject->GetCurrentDisplayText());
+	}
+}
+
+void UWidget_ListEntry_String::OnPreviousOptionButtonClicked()
+{
+	Debug::Print(FString::Printf(TEXT("PreviousOptionButtonClicked")));
+	if (CachedOwningStringDataObject) 
+	{
+		CachedOwningStringDataObject->BackToPreviousOption();
+	}
+}
+
+void UWidget_ListEntry_String::OnNextOptionButtonClicked()
+{
+	Debug::Print(FString::Printf(TEXT("NextOptionButtonClicked")));	
+	if (CachedOwningStringDataObject)
+	{
+		CachedOwningStringDataObject->AdvanceToNextOption();
+	}
 }

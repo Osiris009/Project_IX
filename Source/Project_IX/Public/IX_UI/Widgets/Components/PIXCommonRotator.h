@@ -13,5 +13,7 @@ UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class PROJECT_IX_API UPIXCommonRotator : public UCommonRotator
 {
 	GENERATED_BODY()
+public:
+	void SetSelectiveOptionByText(const FText& InTextOption);
 	
 };

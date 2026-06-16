@@ -15,7 +15,9 @@ public class Project_IX : ModuleRules
             "InputCore",
             "UMG",
             "CommonUI",
-            "GameplayTags",
+            "GameplayAbilities",  
+			"GameplayTags",        
+			"GameplayTasks",
             "CommonInput",
             "EnhancedInput"
         });

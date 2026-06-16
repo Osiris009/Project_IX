@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "IX_UI/Extra/UIEnumTypes.h"
 #include "ListDataObject_Base.generated.h"
 
 
@@ -19,6 +20,10 @@ class PROJECT_IX_API UListDataObject_Base : public UObject
 	
 public:
 	
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, UListDataObject_Base*,EOptionListDataModifyReason)
+	FOnListDataModifiedDelegate OnListDataModified;
+
+
 	LIST_DATA_ACCESSOR(FName,DataID)
 	LIST_DATA_ACCESSOR(FText,DataDisplayName)
 	LIST_DATA_ACCESSOR(FText,DescriptionRichText)
@@ -37,6 +42,9 @@ protected:
 	//
 	virtual void OnDataObjectInitialized();
 	
+	virtual void NotifyListDataModified(UListDataObject_Base* ModifiedData, 
+		EOptionListDataModifyReason ModifyReason = EOptionListDataModifyReason::DirectlyModified);
+
 private:
 	
 	FName DataID;

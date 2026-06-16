@@ -17,9 +17,19 @@ class PROJECT_IX_API UWidget_ListEntry_String : public UWidget_ListEntry_Base
 	
 protected:
 	
+	//~ Begin UWidget interface
+	virtual void NativeOnInitialized() override;
+
 	virtual void OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject) override;
 	
+
+	virtual void OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason) override;
+
 private:
+
+	void OnPreviousOptionButtonClicked();
+	void OnNextOptionButtonClicked();
+
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget, AllowPrivateAccess = "true"))
 	UPIX_CommonButtonBase* CommonButton_PreviousOption;
 	
