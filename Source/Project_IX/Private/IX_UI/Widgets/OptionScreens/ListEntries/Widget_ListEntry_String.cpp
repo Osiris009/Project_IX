@@ -19,7 +19,7 @@ void UWidget_ListEntry_String::NativeOnInitialized()
 void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
 	Super::OnOwningListDataObjectSet(InOwningListDataObject); 
-	
+	// Since this is Widget_ListEntry_String, we can safely cast the incoming data object to UListDataObject_String and cache it for later use.
 	CachedOwningStringDataObject = CastChecked<UListDataObject_String>(InOwningListDataObject);
 	
 	CommonRotator_AvailableOptions->PopulateTextLabels(CachedOwningStringDataObject->GetAvailableOptionTextArray());

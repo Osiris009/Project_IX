@@ -1,0 +1,24 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameUserSettings.h"
+#include "PIXGameUserSettings.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PROJECT_IX_API UPIXGameUserSettings : public UGameUserSettings
+{
+	GENERATED_BODY()
+public:
+	
+	static UPIXGameUserSettings* Get();
+	
+private:
+	
+	UPROPERTY(Config)
+	FString CurrentGameDifficulty; 
+};

@@ -19,7 +19,8 @@ public class Project_IX : ModuleRules
 			"GameplayTags",        
 			"GameplayTasks",
             "CommonInput",
-            "EnhancedInput"
+            "EnhancedInput",
+            "PropertyPath"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[]
