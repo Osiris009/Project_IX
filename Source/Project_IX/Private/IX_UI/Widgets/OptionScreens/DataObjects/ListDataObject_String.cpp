@@ -1,8 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_String.h"
 #include "ProjectDebugHelper.h"
+#include "IX_UI/Widgets/OptionScreens/OptionDataInterationHelper.h"
+
+
+
 
 void UListDataObject_String::AddDynamicOption(const FString& InStringValue, const FText InDisplayText)
 {
@@ -33,7 +36,14 @@ void UListDataObject_String::AdvanceToNextOption()
 	}
 
 	TrySetDisplayTextFromStringValue(CurrentStringValue);
-	NotifyListDataModified(this);
+
+	if(DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(CurrentStringValue);
+		Debug::Print(TEXT("DataDynamicSetter is used. The latest value from Getter: ") + DataDynamicGetter->GetValueAsString());
+		NotifyListDataModified(this);
+	}
+
 }
 
 void UListDataObject_String::BackToPreviousOption()
@@ -59,7 +69,12 @@ void UListDataObject_String::BackToPreviousOption()
 	}
 
 	TrySetDisplayTextFromStringValue(CurrentStringValue);
-	NotifyListDataModified(this);
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(CurrentStringValue);
+		Debug::Print(TEXT("DataDynamicSetter is used. The latest value from Getter: ") + DataDynamicGetter->GetValueAsString());
+		NotifyListDataModified(this);
+	}
 }
 
 void UListDataObject_String::OnDataObjectInitialized()
@@ -71,7 +86,16 @@ void UListDataObject_String::OnDataObjectInitialized()
 	}
 	
 	//TODO :: Read from the saved string value and use it to set the CurrentStringValue  
-	
+	if (DataDynamicGetter)
+	{
+		if (!DataDynamicGetter->GetValueAsString().IsEmpty())
+		{
+			CurrentStringValue = DataDynamicGetter->GetValueAsString();
+			
+		}
+		
+	}
+
 	if(!TrySetDisplayTextFromStringValue(CurrentStringValue))
 	{
 		CurrentDisplayText = FText::FromString(TEXT("InValidOption"));

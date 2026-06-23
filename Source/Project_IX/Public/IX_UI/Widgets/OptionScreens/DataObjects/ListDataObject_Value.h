@@ -6,12 +6,25 @@
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Base.h"
 #include "ListDataObject_Value.generated.h"
 
-/**
- * 
- */
+
+class FOptionDataInterationHelper;
+
 UCLASS(Abstract)
 class PROJECT_IX_API UListDataObject_Value : public UListDataObject_Base
 {
 	GENERATED_BODY()
 	
+public:
+
+	void SetDtataDynamicGetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicGetter);
+
+	void SetDtataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter);
+
+protected:
+
+	// Called when the data object is initialized. Child classes can override this to perform additional initialization.
+	TSharedPtr<FOptionDataInterationHelper> DataDynamicGetter;
+	TSharedPtr<FOptionDataInterationHelper> DataDynamicSetter; 
+
+
 };

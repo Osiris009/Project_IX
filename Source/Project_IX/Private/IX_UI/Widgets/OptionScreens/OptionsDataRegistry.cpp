@@ -6,6 +6,12 @@
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Collection.h"
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_String.h"
 
+#include "IX_UI/Widgets/OptionScreens/OptionDataInterationHelper.h"
+#include "IXProjectSettings/PIXGameUserSettings.h"
+
+#define MAKE_OPTION_DATA_CONTROL(SetterOrGetterFuncName) \
+	MakeShared<FOptionDataInterationHelper>(GET_FUNCTION_NAME_STRING_CHECKED(UPIXGameUserSettings, SetterOrGetterFuncName))
+
 void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPlayer)
 {
 	InitGameplayCollectionTab();
@@ -34,8 +40,15 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 	UListDataObject_Collection* GameplayCollectionTab = NewObject<UListDataObject_Collection>();
 	
 	GameplayCollectionTab->SetDataID(FName("GameplayCollectionTab"));
-	
 	GameplayCollectionTab->SetDataDisplayName(FText::FromString("Gameplay"));
+	
+	//This is For Constructor Data Interaction Helper, which will be used to interact with the game user settings
+	/*TSharedPtr<FOptionDataInterationHelper> ConstructedHelper =
+		MakeShared<FOptionDataInterationHelper>(
+			GET_FUNCTION_NAME_STRING_CHECKED(UPIXGameUserSettings, GetCurrentGameDifficulty)
+		);*/	//*** ***  This macro checks if the function name is valid at compile time, and returns the function name as a string.
+	
+
 
 	//GameDifficultyOption
 	{
@@ -47,6 +60,10 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 		GameDifficulty->AddDynamicOption(TEXT("Normal"), FText::FromString(TEXT("Normal")));
 		GameDifficulty->AddDynamicOption(TEXT("Hard"), FText::FromString(TEXT("Hard")));
 		GameDifficulty->AddDynamicOption(TEXT("VeryHard"), FText::FromString(TEXT("VeryHard")));
+		// Set the dynamic getter and setter for the GameDifficulty option using the macro
+		GameDifficulty->SetDtataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentGameDifficulty));
+		GameDifficulty->SetDtataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentGameDifficulty)); 
+		// Add the GameDifficulty option to the GameplayCollectionTab
 		GameplayCollectionTab->AddChildListData(GameDifficulty);
 		
 	}

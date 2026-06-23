@@ -21,8 +21,6 @@ public:
 	// The registry will then create all the data objects and store them for the options screen to use
 	void InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPlayer);
 
-	
-	
 	const TArray<UListDataObject_Collection*>& GetRegisteredOptionsTabCollections() const { return RegisteredOptionsTabCollections; }
 
 	TArray<UListDataObject_Base*> GetListSourceItemsBySelectedTabID(const FName& InSelectedTabID) const;

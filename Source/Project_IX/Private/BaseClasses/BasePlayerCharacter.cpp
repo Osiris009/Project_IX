@@ -7,7 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
-
+#include "AbilitySystemComponent.h"
+#include "GameplayAbilitySpec.h"
 
 ABasePlayerCharacter::ABasePlayerCharacter()
 {
@@ -23,8 +24,74 @@ ABasePlayerCharacter::ABasePlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	// Create the Ability System Component
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+
+	AbilitySystemComponent->SetIsReplicated(true);
+
+	// Replication Mode:
+	// - Full:    Replicate all GEs to all clients (for player-controlled characters)
+	// - Mixed:   Only replicate GEs to owning client (used with PlayerState ASC pattern)
+	// - Minimal: Don't replicate GEs to any clients (for AI, minions)
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Full);
+}
+
+UAbilitySystemComponent* ABasePlayerCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
   
+void ABasePlayerCharacter::InitializeAbilities()
+{
+	if(!HasAuthority() || !AbilitySystemComponent)
+	{
+		return;
+	}
+
+	for(const TSubclassOf<UGameplayAbility>& AbilityClass : DefaultAbilities)
+	{
+		if(AbilityClass)
+		{
+			// This is how we give an ability to the Ability System Component. We create a spec for the ability and then give it to the ASC.
+			FGameplayAbilitySpec AbilitySpec(
+				AbilityClass,       // The ability class
+				1,                  // Ability level (we'll use this later)
+				INDEX_NONE,         // Input ID (we'll set this up properly later)
+				this);
+
+			// Give the ability to this character's ASC
+			AbilitySystemComponent->GiveAbility(AbilitySpec);           // Source object (who granted this ability)
+		}
+	}
+
+}
+
+void ABasePlayerCharacter::InitializeEffects()
+{
+	if (!HasAuthority() || !AbilitySystemComponent) return;
+
+	// Create an effect context to specify the source of the effects
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	// Apply each default effect to the character
+	for (const TSubclassOf<UGameplayEffect>& EffectClass : DefaultEffects)
+	{
+		if (EffectClass)
+		{
+			FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+				EffectClass, 1, EffectContext
+			);
+
+			if (SpecHandle.IsValid())
+			{
+				AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+	}
+}
+
 // Called when the game starts or when spawned
 void ABasePlayerCharacter::BeginPlay()
 {
@@ -36,6 +103,10 @@ void ABasePlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultInputMappingContext, 0);
 		}
 	}
+
+	// Initialize abilities and effects
+	InitializeAbilities();
+	InitializeEffects();
 }
 
 void ABasePlayerCharacter::Move(const FInputActionValue& Value)
