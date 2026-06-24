@@ -19,10 +19,17 @@ class PROJECT_IX_API UWidget_OptionsScreen : public UWidget_ActivatableBase
 	GENERATED_BODY()
 	
 protected:
-
+	
+	//~ Begin UWidget_ActivatableBase Interface
 	virtual void NativeOnInitialized() override;	
+	//~ End UWidget_ActivatableBase Interface
 
+	//~ Begin UCommonActivatableWidget Interface
 	virtual void NativeOnActivated() override;	
+
+	virtual void NativeOnDeactivated() override;
+
+	//~ End UCommonActivatableWidget Interface
 
 private:
 	//

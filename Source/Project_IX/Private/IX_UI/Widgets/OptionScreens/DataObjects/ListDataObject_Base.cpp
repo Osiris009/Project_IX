@@ -2,6 +2,7 @@
 
 
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Base.h"
+#include "IXProjectSettings/PIXGameUserSettings.h"
 
 void UListDataObject_Base::InitDataObject()
 {
@@ -17,4 +18,8 @@ void UListDataObject_Base::NotifyListDataModified(UListDataObject_Base* Modified
 	EOptionListDataModifyReason ModifyReason)
 {
 	OnListDataModified.Broadcast(ModifiedData, ModifyReason);
+	if (bShouldApplyChangeImimediately)
+	{
+		UPIXGameUserSettings::Get()->ApplySettings(true);
+	}
 }

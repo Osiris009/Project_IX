@@ -36,6 +36,10 @@ public:
 	//Empty in the base class. Child class ListDataObject_Collection should override it. The function should return all the child data a tab has
 	virtual TArray<UListDataObject_Base*> GetAllChildListData() const { return TArray<UListDataObject_Base*>();}
 	virtual bool HasAnyChildListData() const { return false;}
+
+	void SetShouldApplyChangeImimediately(bool bInShouldApplyRightAway){
+		bShouldApplyChangeImimediately = bInShouldApplyRightAway;
+	}
 	
 protected:
 	
@@ -56,6 +60,6 @@ private:
 	UPROPERTY(Transient)
 	UListDataObject_Base* ParentData;
 	
-	
+	bool bShouldApplyChangeImimediately = false;
 	
 };

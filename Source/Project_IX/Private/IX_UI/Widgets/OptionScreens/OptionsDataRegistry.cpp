@@ -64,6 +64,9 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 		GameDifficulty->SetDtataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentGameDifficulty));
 		GameDifficulty->SetDtataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentGameDifficulty)); 
 		// Add the GameDifficulty option to the GameplayCollectionTab
+
+		GameDifficulty->SetShouldApplyChangeImimediately(true); // Set the option to apply changes immediately when modified	
+
 		GameplayCollectionTab->AddChildListData(GameDifficulty);
 		
 	}

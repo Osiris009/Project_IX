@@ -10,8 +10,7 @@
 #include "IX_UI/Widgets/Components/ProIXTabListWidgetBase.h"
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Collection.h"
 #include "IX_UI/Widgets/Components/PIX_CommonListView.h"
-
-
+#include "IXProjectSettings/PIXGameUserSettings.h"
 
 void UWidget_OptionsScreen::NativeOnInitialized()
 {
@@ -45,6 +44,9 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 	// Bind the tab selection delegate once during initialization, BEFORE any tabs are registered.
 	// This ensures we catch the auto-selection that CommonUI fires during RegisterTab.
 	TabListWidget_OptionsTabs->OnTabSelected.AddDynamic(this, &ThisClass::OnOptionsTabSelected);
+
+
+
 }
 
 void UWidget_OptionsScreen::NativeOnActivated()
@@ -81,6 +83,13 @@ void UWidget_OptionsScreen::NativeOnActivated()
 		//
 		OnOptionsTabSelected(FirstTabID);
 	}
+}
+
+void UWidget_OptionsScreen::NativeOnDeactivated()
+{
+	Super::NativeOnDeactivated();
+	// Apply the settings when the options screen is deactivated
+	UPIXGameUserSettings::Get()->ApplySettings(true);
 }
 
 UOptionsDataRegistry* UWidget_OptionsScreen::GetorCreateDataRegistry()
