@@ -46,6 +46,10 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UPIX_CommonListView* CommonListView_OptionsList;
 
+	void OnListViewItemHovered(UObject* InHoveredItem, bool bWasHovered);
+
+	void OnListViewItemSelected(UObject* InSelectedItem);
+
 	//BindedWidgets -------
 
 /* 

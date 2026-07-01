@@ -12,6 +12,10 @@
 #include "IX_UI/Widgets/Components/PIX_CommonListView.h"
 #include "IXProjectSettings/PIXGameUserSettings.h"
 
+#include "IX_UI/Widgets/OptionScreens/ListEntries/Widget_ListEntry_Base.h"
+
+
+
 void UWidget_OptionsScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -29,8 +33,6 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 				// If we find that we want to add a hold requirement later, we can always add those delegates in then.
 			)
 		);
-
-
 	}
 
 	RegisterUIActionBinding(
@@ -45,7 +47,9 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 	// This ensures we catch the auto-selection that CommonUI fires during RegisterTab.
 	TabListWidget_OptionsTabs->OnTabSelected.AddDynamic(this, &ThisClass::OnOptionsTabSelected);
 
+	CommonListView_OptionsList->OnItemIsHoveredChanged().AddUObject(this, &ThisClass::OnListViewItemHovered);
 
+	CommonListView_OptionsList->OnItemSelectionChanged().AddUObject(this, &ThisClass::OnListViewItemSelected);
 
 }
 
@@ -124,6 +128,31 @@ void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabID)
 		CommonListView_OptionsList->SetSelectedIndex(0);
 	}
 }
+
+void UWidget_OptionsScreen::OnListViewItemHovered(UObject* InHoveredItem, bool bWasHovered)
+{
+	if (!InHoveredItem)
+	{
+		return;
+	}
+	
+	UWidget_ListEntry_Base* HoveredEntryWidget = CommonListView_OptionsList->GetEntryWidgetFromItem<UWidget_ListEntry_Base>(InHoveredItem);
+	if (HoveredEntryWidget)
+	{
+		HoveredEntryWidget->NativeOnListEntryWidgetHovered(bWasHovered);
+	}
+}
+
+void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
+{
+	if (!InSelectedItem)
+	{
+		return;
+	}
+	
+}
+ 
+
 
 void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 {

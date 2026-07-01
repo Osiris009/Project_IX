@@ -17,6 +17,14 @@ UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class PROJECT_IX_API UWidget_ListEntry_Base : public UCommonUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
+
+public:	
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On List Entry Widget Hovered"))
+	void BP_OnOwningListDataObjectSet(bool bWasHovered, bool bIsEntryWidgetStillSelected);
+
+
+	void NativeOnListEntryWidgetHovered(bool bWasHovered);
 	
 protected:
 	//from IUserObjectListEntry
@@ -27,6 +35,9 @@ protected:
 	
 	//This child class should override this function to update the ui values after the data object has been modified. Super call not needed 
 	virtual void OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason);
+
+
+	void SelectThisListEntryWidget();
 
 private:
 
