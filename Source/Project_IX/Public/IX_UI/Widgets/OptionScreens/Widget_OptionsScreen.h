@@ -11,7 +11,7 @@ class UOptionsDataRegistry;
 
 class UProIXTabListWidgetBase;
 class UPIX_CommonListView;
-
+class UWidget_OptionsDetailsView;
 
 UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class PROJECT_IX_API UWidget_OptionsScreen : public UWidget_ActivatableBase
@@ -50,6 +50,8 @@ private:
 
 	void OnListViewItemSelected(UObject* InSelectedItem);
 
+	UPROPERTY(meta = (BindWidget))
+	UWidget_OptionsDetailsView* DetailesView_ListEntryInfo;
 	//BindedWidgets -------
 
 /* 
@@ -60,6 +62,8 @@ private:
 	by the options screen's parent widget (the options menu) every time the options screen is created
 
 */
+	FString TryGetEntryWidgetClassName(UObject* InOwningListItem) const;
+
 	UPROPERTY(Transient) 
 	UOptionsDataRegistry* CreatedOwningDataRegistry;
 

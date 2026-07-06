@@ -13,7 +13,7 @@
 #include "IXProjectSettings/PIXGameUserSettings.h"
 
 #include "IX_UI/Widgets/OptionScreens/ListEntries/Widget_ListEntry_Base.h"
-
+#include "IX_UI/Widgets/OptionScreens/Widget_OptionsDetailsView.h"
 
 
 void UWidget_OptionsScreen::NativeOnInitialized()
@@ -141,6 +141,25 @@ void UWidget_OptionsScreen::OnListViewItemHovered(UObject* InHoveredItem, bool b
 	{
 		HoveredEntryWidget->NativeOnListEntryWidgetHovered(bWasHovered);
 	}
+
+	if (bWasHovered)
+	{
+		DetailesView_ListEntryInfo->UpdateDetailsViewInfo(
+			CastChecked<UListDataObject_Base>(InHoveredItem),
+			TryGetEntryWidgetClassName(InHoveredItem)
+		);
+	}
+
+	else
+	{
+		if(UListDataObject_Base * SelectedItem = CommonListView_OptionsList->GetSelectedItem<UListDataObject_Base>())
+		{
+			DetailesView_ListEntryInfo->UpdateDetailsViewInfo(
+				SelectedItem,
+				TryGetEntryWidgetClassName(SelectedItem)
+			);
+		}
+	}
 }
 
 void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
@@ -150,9 +169,22 @@ void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
 		return;
 	}
 	
+	DetailesView_ListEntryInfo->UpdateDetailsViewInfo(
+		CastChecked<UListDataObject_Base>(InSelectedItem),
+		TryGetEntryWidgetClassName(InSelectedItem)
+	);
 }
  
 
+
+FString UWidget_OptionsScreen::TryGetEntryWidgetClassName(UObject* InOwningListItem) const
+{
+	if (UUserWidget* FoundEntryWidget = CommonListView_OptionsList->GetEntryWidgetFromItem(InOwningListItem))
+	{
+		return FoundEntryWidget->GetClass()->GetName();
+	}
+	return TEXT("Entry Widget NOt valid");
+}
 
 void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 {
