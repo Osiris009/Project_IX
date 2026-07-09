@@ -20,11 +20,23 @@ public:
 
 	void SetDtataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter);
 
+	
+	void SetDefaultValueFromString(const FString& InDefaultValue){
+		DefaultStringValue = InDefaultValue;
+	}
+	// The child class should override this function to return true if the data object has a default value.
+	virtual bool HasDefaultValue() const override { return DefaultStringValue.IsSet(); }
+
 protected:
 
 	// Called when the data object is initialized. Child classes can override this to perform additional initialization.
 	TSharedPtr<FOptionDataInterationHelper> DataDynamicGetter;
 	TSharedPtr<FOptionDataInterationHelper> DataDynamicSetter; 
 
+	FString GetDefaultValueAsString() const { return DefaultStringValue.GetValue(); }
+
+private:
+
+	TOptional<FString> DefaultStringValue;
 
 };

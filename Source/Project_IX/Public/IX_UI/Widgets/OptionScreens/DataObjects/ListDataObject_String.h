@@ -7,7 +7,7 @@
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Value.h"
 #include "ListDataObject_String.generated.h"
 
-
+ 
 UCLASS()
 class PROJECT_IX_API UListDataObject_String : public UListDataObject_Value
 {
@@ -34,6 +34,9 @@ protected:
 	
 	TArray<FString> AvailableOptionStringArray;
 	TArray<FText> AvailableOptionTextArray;
+
+	virtual bool CanResetBackToDefaultValue() const override;
+	virtual bool TryResetBackToDefaultValue() override;
 public:
 	//~Form UListDataObject base 
 	FORCEINLINE const TArray<FText>& GetAvailableOptionTextArray() const { return AvailableOptionTextArray;}

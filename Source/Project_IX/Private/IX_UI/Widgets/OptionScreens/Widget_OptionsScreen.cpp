@@ -14,6 +14,8 @@
 
 #include "IX_UI/Widgets/OptionScreens/ListEntries/Widget_ListEntry_Base.h"
 #include "IX_UI/Widgets/OptionScreens/Widget_OptionsDetailsView.h"
+#include "IX_UI/IX_UISubsystem.h"
+#include "IX_UI/Widgets/Components/PIX_CommonButtonBase.h"
 
 
 void UWidget_OptionsScreen::NativeOnInitialized()
@@ -115,7 +117,8 @@ UOptionsDataRegistry* UWidget_OptionsScreen::GetorCreateDataRegistry()
 
 void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabID)
 {
-	Debug::Print(FString::Printf(TEXT("Options tab selected with ID: %s"), *TabID.ToString()));
+	DetailesView_ListEntryInfo->ClearDetailsViewInfo();
+
 	TArray<UListDataObject_Base*> FoundListSourceItems = GetorCreateDataRegistry()->GetListSourceItemsBySelectedTabID(TabID);
 
 	CommonListView_OptionsList->SetListItems(FoundListSourceItems);
@@ -126,6 +129,38 @@ void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabID)
 	{
 		CommonListView_OptionsList->NavigateToIndex(0);
 		CommonListView_OptionsList->SetSelectedIndex(0);
+	}
+
+	ResettableDataArray.Empty();
+
+	for (UListDataObject_Base* FoundListSourceItem : FoundListSourceItems)
+	{
+		if (!FoundListSourceItem)
+		{
+			continue;
+		}
+
+		if (!FoundListSourceItem->OnListDataModified.IsBoundToObject(this))
+		{
+			FoundListSourceItem->OnListDataModified.AddUObject(this, &ThisClass::OnListViewListDataModified);
+		}
+
+		if (FoundListSourceItem->CanResetBackToDefaultValue())
+		{
+			ResettableDataArray.AddUnique(FoundListSourceItem);
+		}
+	}
+
+	if (ResettableDataArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);
+	}
+	else
+	{
+		if (!GetActionBindings().Contains(ResetActionHandle))
+		{
+			AddActionBinding(ResetActionHandle);
+		}
 	}
 }
 
@@ -174,6 +209,36 @@ void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
 		TryGetEntryWidgetClassName(InSelectedItem)
 	);
 }
+
+void UWidget_OptionsScreen::OnListViewListDataModified(UListDataObject_Base* ModifiedData, EOptionListDataModifyReason ModifiedReason)
+{
+	if (!ModifiedData || bIsResettingData)
+	{
+		return;
+	}
+
+	if (ModifiedData->CanResetBackToDefaultValue())
+	{
+		ResettableDataArray.AddUnique(ModifiedData);
+
+		if (!GetActionBindings().Contains(ResetActionHandle))
+		{
+			AddActionBinding(ResetActionHandle);
+		}
+	}
+	else
+	{
+		if (ResettableDataArray.Contains(ModifiedData))
+		{
+			ResettableDataArray.Remove(ModifiedData);
+		}
+	}
+
+	if (ResettableDataArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);
+	}
+}
  
 
 
@@ -188,7 +253,53 @@ FString UWidget_OptionsScreen::TryGetEntryWidgetClassName(UObject* InOwningListI
 
 void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 {
-	Debug::Print(TEXT("Reset action triggered on options screen! Implement reset logic here."));
+	if (ResettableDataArray.IsEmpty())
+	{
+		return;
+	}
+
+	UCommonButtonBase* SelectedTabButton = TabListWidget_OptionsTabs->GetTabButtonBaseByID(TabListWidget_OptionsTabs->GetActiveTab());	
+
+	const FString SelectedTabButtonName = CastChecked<UPIX_CommonButtonBase>(SelectedTabButton)->GetButtonDisplayText().ToString();
+
+	UIX_UISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(
+		EConfirmScreenType::YesNo,
+		FText::FromString(TEXT("Reset All Settings?")),
+		FText::FromString(TEXT("Are you sure you want to reset all the settings under the ") + SelectedTabButtonName + TEXT(" tab?")),
+		[this](EConfirmScreenButtonType ClickedButtonType)
+		{
+			if(ClickedButtonType != EConfirmScreenButtonType::Confirmed)
+			{
+				return;
+			}
+			bIsResettingData = true;
+			bool bHasDataFailedToReset = false;
+			for (UListDataObject_Base* DataToReset : ResettableDataArray)
+			{
+				if(!DataToReset)
+				{
+					continue;
+				}
+				if (DataToReset->TryResetBackToDefaultValue())
+				{
+					Debug::Print(DataToReset->GetDataDisplayName().ToString() + TEXT(" was reset"));
+				}
+				else
+				{
+					bHasDataFailedToReset = true;
+					Debug::Print(DataToReset->GetDataDisplayName().ToString() + TEXT(" failed to reset"));
+				}
+
+			}
+			if (!bHasDataFailedToReset)
+			{
+				ResettableDataArray.Empty();
+
+				RemoveActionBinding(ResetActionHandle);
+			}
+			bIsResettingData = false;
+		}
+	);
 }
 
 void UWidget_OptionsScreen::OnBackBoundActionTriggered()

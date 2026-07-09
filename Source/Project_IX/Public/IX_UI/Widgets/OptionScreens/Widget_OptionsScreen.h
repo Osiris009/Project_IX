@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "IX_UI/Widgets/Widget_ActivatableBase.h"
+#include "IX_UI/Extra/UIEnumTypes.h"
 #include "Widget_OptionsScreen.generated.h"
 
 
@@ -12,6 +13,8 @@ class UOptionsDataRegistry;
 class UProIXTabListWidgetBase;
 class UPIX_CommonListView;
 class UWidget_OptionsDetailsView;
+class UListDataObject_Base;
+
 
 UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class PROJECT_IX_API UWidget_OptionsScreen : public UWidget_ActivatableBase
@@ -50,6 +53,9 @@ private:
 
 	void OnListViewItemSelected(UObject* InSelectedItem);
 
+	void OnListViewListDataModified(UListDataObject_Base* ModifiedData, EOptionListDataModifyReason ModifiedReason);
+
+
 	UPROPERTY(meta = (BindWidget))
 	UWidget_OptionsDetailsView* DetailesView_ListEntryInfo;
 	//BindedWidgets -------
@@ -75,5 +81,10 @@ private:
 	void OnBackBoundActionTriggered();
 
 	FUIActionBindingHandle ResetActionHandle;
+
+	UPROPERTY(Transient)
+	TArray<UListDataObject_Base*> ResettableDataArray;
+
+	bool bIsResettingData = false;
 
 };

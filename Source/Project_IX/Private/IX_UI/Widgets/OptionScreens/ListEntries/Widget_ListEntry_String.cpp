@@ -39,7 +39,7 @@ void UWidget_ListEntry_String::OnOwningListDataObjectModified(UListDataObject_Ba
 
 void UWidget_ListEntry_String::OnPreviousOptionButtonClicked()
 {
-	Debug::Print(FString::Printf(TEXT("PreviousOptionButtonClicked")));
+	
 	if (CachedOwningStringDataObject) 
 	{
 		CachedOwningStringDataObject->BackToPreviousOption();
@@ -50,7 +50,7 @@ void UWidget_ListEntry_String::OnPreviousOptionButtonClicked()
 
 void UWidget_ListEntry_String::OnNextOptionButtonClicked()
 {
-	Debug::Print(FString::Printf(TEXT("NextOptionButtonClicked")));	
+	
 	if (CachedOwningStringDataObject)
 	{
 		CachedOwningStringDataObject->AdvanceToNextOption();

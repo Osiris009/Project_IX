@@ -41,6 +41,13 @@ public:
 		bShouldApplyChangeImimediately = bInShouldApplyRightAway;
 	}
 	
+
+	//The child class should override this function to return true if the data object has a default value.
+	//Child Going to Override this Functions to Provide Implemantation for reseting the value back to default value
+	virtual bool HasDefaultValue() const { return false; }
+	virtual bool CanResetBackToDefaultValue() const { return false; }
+	virtual bool TryResetBackToDefaultValue() { return false; }
+
 protected:
 	
 	//

@@ -61,6 +61,10 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 		GameDifficulty->AddDynamicOption(TEXT("Normal"), FText::FromString(TEXT("Normal")));
 		GameDifficulty->AddDynamicOption(TEXT("Hard"), FText::FromString(TEXT("Hard")));
 		GameDifficulty->AddDynamicOption(TEXT("VeryHard"), FText::FromString(TEXT("VeryHard")));
+
+		GameDifficulty->SetDefaultValueFromString(TEXT("Normal")); // Set the default value for the GameDifficulty option
+
+
 		// Set the dynamic getter and setter for the GameDifficulty option using the macro
 		GameDifficulty->SetDtataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentGameDifficulty));
 		GameDifficulty->SetDtataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentGameDifficulty)); 

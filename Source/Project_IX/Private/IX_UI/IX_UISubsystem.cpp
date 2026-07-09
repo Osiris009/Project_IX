@@ -144,10 +144,9 @@ void UIX_UISubsystem::PushConsumableWidgetToStack()
 			UWidget_ActivatableBase* CreatedWidget = PushedWidget;
 			CreatedConsumableSelector = CastChecked<UWidget_ConsumableSelector>(CreatedWidget);
 			CreatedWidget->ActivateWidget(); // Example of configuring the widget after push
-			Debug::Print(TEXT("Consumable Selector widget created and activated after push"));
+			
 		}
 	}
 );
 
-	Debug::Print(TEXT("Pushed Consumable Selector to stack"));
 }

@@ -13,6 +13,15 @@ void UPIX_CommonButtonBase::SetButtonText(FText InButtonText)
 	}
 }
 
+FText UPIX_CommonButtonBase::GetButtonDisplayText() const
+{
+	if (CommonnTextBlock_ButtonText)
+	{
+		return CommonnTextBlock_ButtonText->GetText();
+	}
+	return FText();
+}
+
 void UPIX_CommonButtonBase::NativePreConstruct()
 {
 	Super::NativePreConstruct();

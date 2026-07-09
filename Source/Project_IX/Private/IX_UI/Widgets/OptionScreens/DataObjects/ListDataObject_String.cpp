@@ -17,7 +17,7 @@ void UListDataObject_String::AdvanceToNextOption()
 {
 	if (AvailableOptionStringArray.IsEmpty() || AvailableOptionTextArray.IsEmpty())
 	{
-		Debug::Print(TEXT("UListDataObject_String::AdvanceToNextOption: No available options to advance to."), 5.f, FColor::Red);
+		
 		return;
 	}
 
@@ -40,7 +40,7 @@ void UListDataObject_String::AdvanceToNextOption()
 	if(DataDynamicSetter)
 	{
 		DataDynamicSetter->SetValueFromString(CurrentStringValue);
-		Debug::Print(TEXT("DataDynamicSetter is used. The latest value from Getter: ") + DataDynamicGetter->GetValueAsString());
+		
 		NotifyListDataModified(this);
 	}
 
@@ -50,7 +50,7 @@ void UListDataObject_String::BackToPreviousOption()
 {
 	if (AvailableOptionStringArray.IsEmpty() || AvailableOptionTextArray.IsEmpty())
 	{
-		Debug::Print(TEXT("UListDataObject_String::AdvanceToNextOption: No available options to advance to."), 5.f, FColor::Red);
+		
 		return;
 	}
 
@@ -72,7 +72,7 @@ void UListDataObject_String::BackToPreviousOption()
 	if (DataDynamicSetter)
 	{
 		DataDynamicSetter->SetValueFromString(CurrentStringValue);
-		Debug::Print(TEXT("DataDynamicSetter is used. The latest value from Getter: ") + DataDynamicGetter->GetValueAsString());
+		
 		NotifyListDataModified(this);
 	}
 }
@@ -82,7 +82,7 @@ void UListDataObject_String::OnDataObjectInitialized()
 	if (!AvailableOptionStringArray.IsEmpty())
 	{
 		CurrentStringValue = AvailableOptionStringArray[0];
-		Debug::Print(FString::Printf(TEXT("UListDataObject_String::OnDataObjectInitialized: CurrentStringValue set to %s"), *CurrentStringValue), 5.f, FColor::Green);
+		//Debug::Print(FString::Printf(TEXT("UListDataObject_String::OnDataObjectInitialized: CurrentStringValue set to %s"), *CurrentStringValue), 5.f, FColor::Green);
 	}
 	
 	//TODO :: Read from the saved string value and use it to set the CurrentStringValue  
@@ -113,5 +113,31 @@ bool UListDataObject_String::TrySetDisplayTextFromStringValue(const FString& InS
 		return true;
 	}	
 	return false ;
+}
+
+bool UListDataObject_String::CanResetBackToDefaultValue() const
+{
+	return HasDefaultValue() && CurrentStringValue != GetDefaultValueAsString();
+}
+
+bool UListDataObject_String::TryResetBackToDefaultValue()
+{
+	if(CanResetBackToDefaultValue())
+	{
+		CurrentStringValue = GetDefaultValueAsString();
+
+		TrySetDisplayTextFromStringValue(CurrentStringValue);
+
+		if (DataDynamicSetter)
+		{
+			DataDynamicSetter->SetValueFromString(CurrentStringValue);
+			
+			NotifyListDataModified(this, EOptionListDataModifyReason::ResetToDefault);
+
+			return true;
+		}
+	}
+
+	return false;
 }
 

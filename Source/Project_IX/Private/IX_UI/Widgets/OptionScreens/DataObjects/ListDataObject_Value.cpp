@@ -15,3 +15,4 @@ void UListDataObject_Value::SetDtataDynamicSetter(const TSharedPtr<FOptionDataIn
 {
 	DataDynamicSetter = InDynamicSetter;
 }
+

@@ -21,6 +21,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PIX UI Button|Setters")
 	void SetButtonText(FText InButtonText);
 
+	UFUNCTION(BlueprintCallable, Category = "PIX UI Button|Setters")
+	FText GetButtonDisplayText() const;
+
 
 private:
 	/// UUserWidget interface
