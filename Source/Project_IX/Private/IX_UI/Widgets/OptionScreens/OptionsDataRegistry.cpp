@@ -8,6 +8,8 @@
 
 #include "IX_UI/Widgets/OptionScreens/OptionDataInterationHelper.h"
 #include "IXProjectSettings/PIXGameUserSettings.h"
+#include "IX_UI/Extra/UIGamePlayTags.h"
+#include "IXFuctionLibrary/UIFunctionLibrary.h"
 
 #define MAKE_OPTION_DATA_CONTROL(SetterOrGetterFuncName) \
 	MakeShared<FOptionDataInterationHelper>(GET_FUNCTION_NAME_STRING_CHECKED(UPIXGameUserSettings, SetterOrGetterFuncName))
@@ -80,7 +82,9 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 	{
 		UListDataObject_String* TestingItem = NewObject<UListDataObject_String>();
 		TestingItem->SetDataID(FName("Testing"));
-		TestingItem->SetDataDisplayName(FText::FromString(TEXT( "Testing ")));
+		TestingItem->SetDataDisplayName(FText::FromString(TEXT("Test Image Item")));
+		TestingItem->SetSoftDescriptionImage(UUIFunctionLibrary::GetOptionsSoftImageByTag(IXGameplayTags::IXUI_Image_TestImage));
+		TestingItem->SetDescriptionRichText(FText::FromString(TEXT("The image to display can be specified in the project settings. It can be anything the developer assigned in there")));
 		GameplayCollectionTab->AddChildListData(TestingItem);
 	}
 

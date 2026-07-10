@@ -91,6 +91,18 @@ void UWidget_OptionsScreen::NativeOnActivated()
 	}
 }
 
+UWidget* UWidget_OptionsScreen::NativeGetDesiredFocusTarget() const
+{
+	if (UObject* SelectedItem = CommonListView_OptionsList->GetSelectedItem())
+	{
+		if (UUserWidget* SelectedEntryWidget = CommonListView_OptionsList->GetEntryWidgetFromItem(SelectedItem))
+		{
+			return SelectedEntryWidget;
+		}
+	}
+	return Super::NativeGetDesiredFocusTarget();
+}
+
 void UWidget_OptionsScreen::NativeOnDeactivated()
 {
 	Super::NativeOnDeactivated();

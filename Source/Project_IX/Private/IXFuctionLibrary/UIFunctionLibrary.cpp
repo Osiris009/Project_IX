@@ -15,3 +15,11 @@ TSoftClassPtr<UWidget_ActivatableBase> UUIFunctionLibrary::GetUISoftWidgetClassB
 	return UIDevSettings->DefaultWidgetForWidgetStack.FindRef(InWidgetTag);
 
 }
+
+
+TSoftObjectPtr<UTexture2D> UUIFunctionLibrary::GetOptionsSoftImageByTag(UPARAM(meta = (Categories = "IXUI.Image"))FGameplayTag InImageTag)
+{
+	const UIXDeveloperSettings* UIDeveloperSettings =  GetDefault<UIXDeveloperSettings>();
+	checkf(UIDeveloperSettings->OptionsScreenSoftImageMap.Contains(InImageTag), TEXT("Could not find an image accociated with tag %s"), *InImageTag.ToString());
+	return UIDeveloperSettings->OptionsScreenSoftImageMap.FindRef(InImageTag);
+}

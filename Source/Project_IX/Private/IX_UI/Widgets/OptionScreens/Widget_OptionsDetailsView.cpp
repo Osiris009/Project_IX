@@ -22,7 +22,10 @@ void UWidget_OptionsDetailsView::UpdateDetailsViewInfo(UListDataObject_Base* InD
 		CommonLazyImage_DiscriptionImage->SetBrushFromSoftTexture(InDataObject->GetSoftDescriptionImage());
 		CommonLazyImage_DiscriptionImage->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	}
-	
+	else
+	{
+		CommonLazyImage_DiscriptionImage->SetVisibility(ESlateVisibility::Collapsed);
+	}
 	CommonRichText_Description->SetText(InDataObject->GetDescriptionRichText());
 
 	const FString DynamicDetails = FString::Printf(

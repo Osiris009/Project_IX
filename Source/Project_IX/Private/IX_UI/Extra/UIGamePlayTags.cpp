@@ -17,4 +17,6 @@ namespace IXGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(IXUI_Widget_StoryScreen, "IXUI.Widget.StoryScreen");
 	UE_DEFINE_GAMEPLAY_TAG(IXUI_Widget_OptionsScreen, "IXUI.Widget.OptionsScreen");
 	UE_DEFINE_GAMEPLAY_TAG(IXUI_Widget_ConsumableToggle, "IXUI.Widget.ConsumableToggle");
+
+	UE_DEFINE_GAMEPLAY_TAG(IXUI_Image_TestImage, "IXUI.Image.TestImage");
 }

@@ -22,6 +22,7 @@ public:
 	void AdvanceToNextOption();
 	void BackToPreviousOption();
 	
+	void OnRotatorInitiatedValueChanged(const FText& InNewSelectedText);
 
 protected:
 

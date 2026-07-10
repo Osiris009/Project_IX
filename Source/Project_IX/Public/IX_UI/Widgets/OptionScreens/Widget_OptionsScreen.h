@@ -30,6 +30,12 @@ protected:
 	//~ Begin UCommonActivatableWidget Interface
 	virtual void NativeOnActivated() override;	
 
+	/**
+	 * Override to provide the desired widget that should receive focus when this becomes the primary active widget.
+	 * If bAutoRestoreFocus is true, is only called when there is no valid cached restoration target (to provide the default/fallback)
+	 */
+	virtual UWidget* NativeGetDesiredFocusTarget() const override;
+
 	virtual void NativeOnDeactivated() override;
 
 	//~ End UCommonActivatableWidget Interface

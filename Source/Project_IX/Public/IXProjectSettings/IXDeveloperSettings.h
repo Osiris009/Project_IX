@@ -19,6 +19,7 @@ public:
 	UPROPERTY(EditAnywhere, Config, Category = "WidgetRefrence", meta = (ForceInlineRow, Categories = "IXUI.Widget"))
 	TMap< FGameplayTag, TSoftClassPtr<UWidget_ActivatableBase>> DefaultWidgetForWidgetStack;
 
-
+	UPROPERTY(Config, EditAnywhere, Category = "Options Image Reference", meta = (ForceInlineRow, Categories = "IXUI.Image"))
+	TMap< FGameplayTag, TSoftObjectPtr<UTexture2D> > OptionsScreenSoftImageMap;
 
 };

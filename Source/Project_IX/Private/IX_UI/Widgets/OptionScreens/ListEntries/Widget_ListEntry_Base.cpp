@@ -21,6 +21,15 @@ void UWidget_ListEntry_Base::NativeOnListItemObjectSet(UObject* ListItemObject)
 	OnOwningListDataObjectSet(CastChecked<UListDataObject_Base>(ListItemObject));
 }
 
+void UWidget_ListEntry_Base::NativeOnEntryReleased()
+{
+	/*This is the Function from the interface IUserObjectListEntry, which is called when the list entry is released*/	
+	IUserObjectListEntry::NativeOnEntryReleased();
+	/*Unbind the delegate from the data object, so that this widget is not listening to the data object anymore*/
+		
+	NativeOnListEntryWidgetHovered(false);	//Unhover the widget when it is released, so that the hover state is reset
+}
+
 void UWidget_ListEntry_Base::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
 	if (CommonText_SettingDisplayName)

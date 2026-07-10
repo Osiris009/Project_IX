@@ -19,4 +19,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "UI")
 	static TSoftClassPtr<UWidget_ActivatableBase> GetUISoftWidgetClassByTag(UPARAM(meta = (Categories = "IXUI.Widget"))FGameplayTag InWidgetTag);
+
+	UFUNCTION(BlueprintPure, Category = "UIFunction Library")
+	static TSoftObjectPtr<UTexture2D> GetOptionsSoftImageByTag(UPARAM(meta = (Categories = "IXUI.Image"))FGameplayTag InImageTag);
 };

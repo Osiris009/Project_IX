@@ -30,6 +30,8 @@ private:
 	void OnPreviousOptionButtonClicked();
 	void OnNextOptionButtonClicked();
 
+	void OnRotatorValueChanged(int32 Value, bool bUserInitiated);
+
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget, AllowPrivateAccess = "true"))
 	UPIX_CommonButtonBase* CommonButton_PreviousOption;
 	

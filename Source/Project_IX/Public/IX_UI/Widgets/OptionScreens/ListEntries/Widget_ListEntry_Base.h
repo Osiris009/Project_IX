@@ -33,8 +33,11 @@ protected:
 	UWidget* BP_GetWidgetToFocusForGamepad() const;
 
 	//from IUserObjectListEntry
-	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	
+	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	virtual void NativeOnEntryReleased() override;
+
+
 	//The Child class should override this function to handle the initialization needed. Super call is expected  
 	virtual void OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject);
 	

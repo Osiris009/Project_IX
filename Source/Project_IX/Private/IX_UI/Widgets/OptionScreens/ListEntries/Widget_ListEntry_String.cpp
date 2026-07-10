@@ -5,7 +5,7 @@
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_String.h"
 #include "IX_UI/Widgets/Components/PIXCommonRotator.h"
 #include "IX_UI/Widgets/Components/PIX_CommonButtonBase.h" 
-
+#include "CommonInputSubsystem.h"
 #include "ProjectDebugHelper.h"
 
 void UWidget_ListEntry_String::NativeOnInitialized()
@@ -16,6 +16,7 @@ void UWidget_ListEntry_String::NativeOnInitialized()
 	CommonButton_NextOption->OnClicked().AddUObject(this, &ThisClass::OnNextOptionButtonClicked);
 
 	CommonRotator_AvailableOptions->OnClicked().AddLambda([this](){SelectThisListEntryWidget();});
+	CommonRotator_AvailableOptions->OnRotatedEvent.AddUObject(this, &ThisClass::OnRotatorValueChanged);
 }
 
 void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
@@ -57,4 +58,24 @@ void UWidget_ListEntry_String::OnNextOptionButtonClicked()
 	}
 
 	SelectThisListEntryWidget();	
+}
+
+void UWidget_ListEntry_String::OnRotatorValueChanged(int32 Value, bool bUserInitiated)
+{
+	if (!CachedOwningStringDataObject)
+	{
+		return;
+	}
+
+	UCommonInputSubsystem* CommonInputSubsystem = GetInputSubsystem();
+
+	if(!CommonInputSubsystem || !bUserInitiated)
+	{
+		return;
+	}
+
+	if(CommonInputSubsystem->GetCurrentInputType() == ECommonInputType::Gamepad)
+	{
+		CachedOwningStringDataObject->OnRotatorInitiatedValueChanged(CommonRotator_AvailableOptions->GetSelectedText());
+	}
 }
