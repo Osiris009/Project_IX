@@ -20,6 +20,15 @@ class UGameplayAbility;
 class UGameplayEffect;
 
 
+UENUM(BlueprintType)
+enum class EGaitState : uint8
+{
+	Walk       UMETA(DisplayName = "Walk"),
+	Run        UMETA(DisplayName = "Run"),
+	Sprint     UMETA(DisplayName = "Sprint")
+};
+
+
 UCLASS()
 class PROJECT_IX_API ABasePlayerCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -84,6 +93,11 @@ public:
 	// Called to grant default abilities and apply default effects
 	void InitializeAbilities();
 	void InitializeEffects();
+
+
+	//Movement state	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gait")
+	EGaitState GaitState;
 
 protected:
 	// Called when the game starts or when spawned
