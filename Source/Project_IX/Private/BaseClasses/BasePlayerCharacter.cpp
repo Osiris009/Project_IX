@@ -7,8 +7,13 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
-#include "AbilitySystemComponent.h"
+#include "AbilityClasses/PIXAbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
+#include "AbilityClasses/PIXPlayerState.h"
+#include "AbilityClasses/AttributSets/AS_CharacterAttributs.h"
+
+
+
 
 ABasePlayerCharacter::ABasePlayerCharacter()
 {
@@ -26,69 +31,73 @@ ABasePlayerCharacter::ABasePlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Create the Ability System Component
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-
-	AbilitySystemComponent->SetIsReplicated(true);
+	
 
 	// Replication Mode:
 	// - Full:    Replicate all GEs to all clients (for player-controlled characters)
 	// - Mixed:   Only replicate GEs to owning client (used with PlayerState ASC pattern)
 	// - Minimal: Don't replicate GEs to any clients (for AI, minions)
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Full);
+	
 }
 
 UAbilitySystemComponent* ABasePlayerCharacter::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return PIXAbilitySystemComponent;
+}
+
+// Called on the SERVER when a controller possesses this character
+void ABasePlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// Server GAS init
+	InitGas();
+	// Grant abilities, but only on the server
+	GrantDefaultAbilities();
+}
+
+
+// Called on the OWNING CLIENT when PlayerState replicates down
+void ABasePlayerCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	// Client GAS init
+	InitGas();
 }
   
-void ABasePlayerCharacter::InitializeAbilities()
+
+
+void ABasePlayerCharacter::InitGas()
 {
-	if(!HasAuthority() || !AbilitySystemComponent)
-	{
-		return;
-	}
+	APIXPlayerState* PS = GetPlayerState<APIXPlayerState>();
+	if (!PS) return;
 
-	for(const TSubclassOf<UGameplayAbility>& AbilityClass : DefaultAbilities)
-	{
-		if(AbilityClass)
-		{
-			// This is how we give an ability to the Ability System Component. We create a spec for the ability and then give it to the ASC.
-			FGameplayAbilitySpec AbilitySpec(
-				AbilityClass,       // The ability class
-				1,                  // Ability level (we'll use this later)
-				INDEX_NONE,         // Input ID (we'll set this up properly later)
-				this);
+	// Cache the pointer to the ASC from PlayerState
+	PIXAbilitySystemComponent = PS->GetPIXAbilitySystemComponent();
+	ChAttributeSet = PS->GetAttributeSet();
 
-			// Give the ability to this character's ASC
-			AbilitySystemComponent->GiveAbility(AbilitySpec);           // Source object (who granted this ability)
-		}
-	}
+	// This call tells the ASC who owns it (PlayerState) and who
+   // is the visible avatar in the world (this Character).
+   // GAS uses both internally — Owner for replication,
+   // Avatar for targeting and animations.
+	PIXAbilitySystemComponent->InitAbilityActorInfo(PS, this);
 
 }
 
-void ABasePlayerCharacter::InitializeEffects()
+void ABasePlayerCharacter::GrantDefaultAbilities()
 {
-	if (!HasAuthority() || !AbilitySystemComponent) return;
+	// Only grant on server — GAS replicates ability specs to clients
+	if (!HasAuthority() || !PIXAbilitySystemComponent) return;
 
-	// Create an effect context to specify the source of the effects
-	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-	EffectContext.AddSourceObject(this);
 
-	// Apply each default effect to the character
-	for (const TSubclassOf<UGameplayEffect>& EffectClass : DefaultEffects)
+	for (const TSubclassOf<UGameplayAbility>& AbilityClass : DefaultAbilities)
 	{
-		if (EffectClass)
-		{
-			FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
-				EffectClass, 1, EffectContext
-			);
+		if (!AbilityClass) continue;
 
-			if (SpecHandle.IsValid())
-			{
-				AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-			}
-		}
+		// FGameplayAbilitySpec is a handle to an ability instance.
+		// It stores the class, level, and how it was activated.
+		// Binding input is done here via the InputID parameter.
+		FGameplayAbilitySpec AbilitySpec(AbilityClass, 1);
+		PIXAbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
 }
 
@@ -104,9 +113,7 @@ void ABasePlayerCharacter::BeginPlay()
 		}
 	}
 
-	// Initialize abilities and effects
-	InitializeAbilities();
-	InitializeEffects();
+	
 }
 
 void ABasePlayerCharacter::Move(const FInputActionValue& Value)

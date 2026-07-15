@@ -14,8 +14,8 @@ class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 
-class UAbilitySystemComponent;
-class UAttributeSet;
+class UPIXAbilitySystemComponent;
+class UAS_CharacterAttributs;
 class UGameplayAbility;
 class UGameplayEffect;
 
@@ -42,6 +42,12 @@ public:
 	//~ Begin IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface
+
+	// Called by the Character to hand its identity to the ASC.
+	// The ASC needs two actors: the Owner (PlayerState) and the Avatar (the visible Character).
+	virtual void PossessedBy(AController* NewController) override;       // Server
+	virtual void OnRep_PlayerState() override;                           // Client
+
 
 	//~Inputs 
 	
@@ -79,20 +85,25 @@ public:
 
 	// The ability system component — the brain of GAS for this actor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAS")
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UPIXAbilitySystemComponent> PIXAbilitySystemComponent;
+	
 	// The attribute set — we'll create this in Section 3
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAS_CharacterAttributs> ChAttributeSet;
+
 	// Abilities to grant on spawn
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+	
 	// Effects to apply on spawn (e.g., set initial attribute values)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Effects")
 	TArray<TSubclassOf<UGameplayEffect>> DefaultEffects;
 
-	// Called to grant default abilities and apply default effects
-	void InitializeAbilities();
-	void InitializeEffects();
+	// Called on both server and client once PlayerState is valid
+	virtual void InitGas();
+
+	// Grant all abilities in DefaultAbilities to the ASC
+	virtual void GrantDefaultAbilities();
 
 
 	//Movement state	

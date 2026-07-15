@@ -12,7 +12,7 @@ UAS_CharacterAttributs::UAS_CharacterAttributs()
 	InitHealth(100.f);
 	InitMaxHealth(100.f);
 	InitStamina(100.f);
-	InitMaxStamina(100.f);
+	InitMaxStamina(100.f); //Simple initialize the attributes to 100.0f, this will be changed by the GameplayEffect applied at spawn.
 }
 
 void UAS_CharacterAttributs::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
