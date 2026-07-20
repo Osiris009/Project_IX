@@ -152,6 +152,20 @@ void ABasePlayerCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ABasePlayerCharacter::Input_Attack_Pressed()
+{
+	if (!PIXAbilitySystemComponent) return;
+
+	// Activate by tag — this is the preferred AAA pattern.
+	// You don't hardcode a class reference; you ask GAS to
+	// activate whatever ability has this tag.
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(
+		FGameplayTag::RequestGameplayTag(FName("Ability.Attack.Melee")));
+
+	PIXAbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
+}
+
 // Called every frame
 void ABasePlayerCharacter::Tick(float DeltaTime)
 {
@@ -164,15 +178,18 @@ void ABasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	if(UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	if(UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABasePlayerCharacter::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABasePlayerCharacter::Look);
-
+		EIC->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABasePlayerCharacter::Move);
+		EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABasePlayerCharacter::Look);	
 
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EIC->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EIC->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+		EIC->BindAction(AttackInputAction, ETriggerEvent::Triggered,
+			this, &ABasePlayerCharacter	::Input_Attack_Pressed);
+
 	}
 
 }

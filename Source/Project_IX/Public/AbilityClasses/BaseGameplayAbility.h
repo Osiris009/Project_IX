@@ -20,7 +20,6 @@ public:
 
 	UBaseGameplayAbility();
 
-	// Which input action activates this ability (we'll use this for input binding)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
-	int32 AbilityInputID = 0;
+	// A helper to safely get our custom ASC from the current ability spec
+	class UPIXAbilitySystemComponent* GetPIXAbilitySystemComponent() const;
 };
