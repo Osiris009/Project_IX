@@ -95,9 +95,20 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 {
 	UListDataObject_Collection* AudioCollectionTab = NewObject<UListDataObject_Collection>();
 
-	AudioCollectionTab->SetDataID(FName("AudioCollectionTab"));
+	AudioCollectionTab->SetDataID(FName("AudioCollectionTab")); //from which the options screen will know which tab is selected
 
-	AudioCollectionTab->SetDataDisplayName(FText::FromString("Audio"));	
+	AudioCollectionTab->SetDataDisplayName(FText::FromString("Audio"));	// The display name of the tab that will be shown in the options screen
+
+	//Volume Catagory 
+
+	{
+		UListDataObject_Base* VolumeCategoryCollection = NewObject<UListDataObject_Collection>();
+		VolumeCategoryCollection->SetDataID(FName("VolumeCategoryCollection"));
+		VolumeCategoryCollection->SetDataDisplayName(FText::FromString("Volume")); // The display name of the category that will be shown in the options screen
+
+		AudioCollectionTab->AddChildListData(VolumeCategoryCollection);
+	}
+
 	RegisteredOptionsTabCollections.Add(AudioCollectionTab);
 }
 
