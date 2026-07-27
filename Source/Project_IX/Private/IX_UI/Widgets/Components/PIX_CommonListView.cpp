@@ -6,7 +6,7 @@
 #include "IX_UI/Widgets/OptionScreens/DataAsset_DataListEntryMapping.h"
 #include "IX_UI/Widgets/OptionScreens/ListEntries/Widget_ListEntry_Base.h"
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Base.h"
-
+#include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Collection.h"
 
 
 UUserWidget& UPIX_CommonListView::OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass, const TSharedRef<STableViewBase>& OwnerTable)
@@ -30,6 +30,11 @@ UUserWidget& UPIX_CommonListView::OnGenerateEntryWidgetInternal(UObject* Item, T
         return Super::OnGenerateEntryWidgetInternal(Item, DesiredEntryClass, OwnerTable);
     }
 
+}
+
+bool UPIX_CommonListView::OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem)
+{
+	return !FirstSelectedItem->IsA<UListDataObject_Collection>();
 }
 
 //~~ UWidget interface

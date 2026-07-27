@@ -17,6 +17,9 @@ class PROJECT_IX_API UPIX_CommonListView : public UCommonListView
 protected:
 	//~~ UCommonListView interface
 	virtual UUserWidget& OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass, const TSharedRef<STableViewBase>& OwnerTable) override;
+	
+	virtual bool OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem) override;
+	
 	//~~ End of UCommonListView interface
 
 private:

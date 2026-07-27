@@ -33,8 +33,47 @@ TArray<UListDataObject_Base*> UOptionsDataRegistry::GetListSourceItemsBySelected
 	checkf(FoundCollectionPtr, TEXT("No collection found for the given tab ID: %s"), *InSelectedTabID.ToString());
 
 	UListDataObject_Collection* FoundTabCollection = *FoundCollectionPtr;
-	return FoundTabCollection->GetAllChildListData();// Return the child list data of the found collection, 
+
+	TArray<UListDataObject_Base*> AllChildListItems;
+
+	for(UListDataObject_Base* ChildListData : FoundTabCollection->GetAllChildListData())
+	{
+		if(!ChildListData)
+		{
+			continue;
+		}
+
+		AllChildListItems.Add(ChildListData);
+
+		if (ChildListData->HasAnyChildListData())
+		{
+			FindChildListDataRecursively(ChildListData, AllChildListItems);
+		}
+	}
+	
+	return AllChildListItems;	
+	// Return the child list data of the found collection, 
 	//which will be used as the source items for the options list view
+}
+
+void UOptionsDataRegistry::FindChildListDataRecursively(UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const 
+{
+	if (!InParentData || !InParentData->HasAnyChildListData())
+	{
+		return;
+	}
+	for (UListDataObject_Base* SubChildListData : InParentData->GetAllChildListData())
+	{
+		if (!SubChildListData)
+		{
+			continue;	
+		}
+		 OutFoundChildListData.Add(SubChildListData);
+		if (SubChildListData->HasAnyChildListData())
+		{
+			FindChildListDataRecursively(SubChildListData, OutFoundChildListData);
+		}
+	}
 }
 
 void UOptionsDataRegistry::InitGameplayCollectionTab()
@@ -93,23 +132,33 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 
 void UOptionsDataRegistry::InitAudioCollectionTab()
 {
-	UListDataObject_Collection* AudioCollectionTab = NewObject<UListDataObject_Collection>();
+	UListDataObject_Collection* AudioTabCollection = NewObject<UListDataObject_Collection>();
 
-	AudioCollectionTab->SetDataID(FName("AudioCollectionTab")); //from which the options screen will know which tab is selected
+	AudioTabCollection->SetDataID(FName("AudioCollectionTab")); //from which the options screen will know which tab is selected
 
-	AudioCollectionTab->SetDataDisplayName(FText::FromString("Audio"));	// The display name of the tab that will be shown in the options screen
+	AudioTabCollection->SetDataDisplayName(FText::FromString("Audio"));	// The display name of the tab that will be shown in the options screen
 
 	//Volume Catagory 
 
+	//Volume Category
 	{
-		UListDataObject_Base* VolumeCategoryCollection = NewObject<UListDataObject_Collection>();
+		UListDataObject_Collection* VolumeCategoryCollection = NewObject<UListDataObject_Collection>();
 		VolumeCategoryCollection->SetDataID(FName("VolumeCategoryCollection"));
-		VolumeCategoryCollection->SetDataDisplayName(FText::FromString("Volume")); // The display name of the category that will be shown in the options screen
+		VolumeCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Volume")));
 
-		AudioCollectionTab->AddChildListData(VolumeCategoryCollection);
+		AudioTabCollection->AddChildListData(VolumeCategoryCollection);
+
+		//Test Item for category
+		{
+			UListDataObject_String* TestItem = NewObject<UListDataObject_String>();
+			TestItem->SetDataID(FName("TestItem"));
+			TestItem->SetDataDisplayName(FText::FromString(TEXT("Test Item")));
+
+			VolumeCategoryCollection->AddChildListData(TestItem);
+		}
 	}
 
-	RegisteredOptionsTabCollections.Add(AudioCollectionTab);
+	RegisteredOptionsTabCollections.Add(AudioTabCollection);
 }
 
 void UOptionsDataRegistry::InitVideoCollectionTab()

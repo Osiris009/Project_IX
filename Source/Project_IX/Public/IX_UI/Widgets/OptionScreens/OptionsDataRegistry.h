@@ -28,7 +28,9 @@ public:
 
 private:
 	
-	void InitGameplayCollectionTab();
+	void FindChildListDataRecursively(UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const;
+
+	void InitGameplayCollectionTab();       
 
 	void InitAudioCollectionTab();
 	
