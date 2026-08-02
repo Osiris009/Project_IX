@@ -25,9 +25,7 @@ public:
 	UFUNCTION()
 	void SetCurrentGameDifficulty(const FString& NewDifficulty) { CurrentGameDifficulty = NewDifficulty; }
 
-	//*** GamePlay Collection Tabs ***//
-
-
+	//*** GamePlay Collection Tabs ***//       
 
 private:
 	

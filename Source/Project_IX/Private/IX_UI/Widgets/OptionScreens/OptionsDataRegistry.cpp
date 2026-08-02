@@ -10,6 +10,11 @@
 #include "IXProjectSettings/PIXGameUserSettings.h"
 #include "IX_UI/Extra/UIGamePlayTags.h"
 #include "IXFuctionLibrary/UIFunctionLibrary.h"
+#include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Scalar.h"
+
+
+
+
 
 #define MAKE_OPTION_DATA_CONTROL(SetterOrGetterFuncName) \
 	MakeShared<FOptionDataInterationHelper>(GET_FUNCTION_NAME_STRING_CHECKED(UPIXGameUserSettings, SetterOrGetterFuncName))
@@ -24,21 +29,21 @@ void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPl
 
 TArray<UListDataObject_Base*> UOptionsDataRegistry::GetListSourceItemsBySelectedTabID(const FName& InSelectedTabID) const
 {
-	UListDataObject_Collection* const* FoundCollectionPtr = RegisteredOptionsTabCollections.FindByPredicate(
+	UListDataObject_Collection* const* FoundTabCollectionPtr = RegisteredOptionsTabCollections.FindByPredicate(
 		[InSelectedTabID](UListDataObject_Collection* AvailableTabCollection)->bool
 		{
 			return AvailableTabCollection->GetDataID() == InSelectedTabID;
 		}
 	);
-	checkf(FoundCollectionPtr, TEXT("No collection found for the given tab ID: %s"), *InSelectedTabID.ToString());
+	checkf(FoundTabCollectionPtr,TEXT("No valid tab found under the ID %s"),*InSelectedTabID.ToString());
 
-	UListDataObject_Collection* FoundTabCollection = *FoundCollectionPtr;
+	UListDataObject_Collection* FoundTabCollection = *FoundTabCollectionPtr;
 
 	TArray<UListDataObject_Base*> AllChildListItems;
 
-	for(UListDataObject_Base* ChildListData : FoundTabCollection->GetAllChildListData())
+	for (UListDataObject_Base* ChildListData : FoundTabCollection->GetAllChildListData())
 	{
-		if(!ChildListData)
+		if (!ChildListData)
 		{
 			continue;
 		}
@@ -47,34 +52,38 @@ TArray<UListDataObject_Base*> UOptionsDataRegistry::GetListSourceItemsBySelected
 
 		if (ChildListData->HasAnyChildListData())
 		{
-			FindChildListDataRecursively(ChildListData, AllChildListItems);
+			FindChildListDataRecursively(ChildListData,AllChildListItems);
 		}
 	}
-	
+
 	return AllChildListItems;	
 	// Return the child list data of the found collection, 
 	//which will be used as the source items for the options list view
 }
 
-void UOptionsDataRegistry::FindChildListDataRecursively(UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const 
+void UOptionsDataRegistry::FindChildListDataRecursively(UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const
 {
 	if (!InParentData || !InParentData->HasAnyChildListData())
 	{
 		return;
 	}
+
 	for (UListDataObject_Base* SubChildListData : InParentData->GetAllChildListData())
 	{
 		if (!SubChildListData)
 		{
-			continue;	
+			continue;
 		}
-		 OutFoundChildListData.Add(SubChildListData);
+
+		OutFoundChildListData.Add(SubChildListData);
+
 		if (SubChildListData->HasAnyChildListData())
 		{
-			FindChildListDataRecursively(SubChildListData, OutFoundChildListData);
+			FindChildListDataRecursively(SubChildListData,OutFoundChildListData);
 		}
 	}
 }
+
 
 void UOptionsDataRegistry::InitGameplayCollectionTab()
 {
@@ -133,11 +142,12 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 void UOptionsDataRegistry::InitAudioCollectionTab()
 {
 	UListDataObject_Collection* AudioTabCollection = NewObject<UListDataObject_Collection>();
+	AudioTabCollection->SetDataID(FName("AudioTabCollection"));
+	AudioTabCollection->SetDataDisplayName(FText::FromString(TEXT("Audio")));
+	
+	// The display name of the tab that will be shown in the options screen
 
-	AudioTabCollection->SetDataID(FName("AudioCollectionTab")); //from which the options screen will know which tab is selected
-
-	AudioTabCollection->SetDataDisplayName(FText::FromString("Audio"));	// The display name of the tab that will be shown in the options screen
-
+	//from which the options screen will know which tab is selected
 	//Volume Catagory 
 
 	//Volume Category
@@ -148,14 +158,23 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 
 		AudioTabCollection->AddChildListData(VolumeCategoryCollection);
 
-		//Test Item for category
+		//OverAll Volume
 		{
-			UListDataObject_String* TestItem = NewObject<UListDataObject_String>();
-			TestItem->SetDataID(FName("TestItem"));
-			TestItem->SetDataDisplayName(FText::FromString(TEXT("Test Item")));
+			UListDataObject_Scalar* OverallVolume = NewObject<UListDataObject_Scalar>();
+			OverallVolume->SetDataID(FName("OverallVolume"));
+			OverallVolume->SetDataDisplayName(FText::FromString(TEXT("Overall Volume")));
+			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description for Overall Volume")));
+			OverallVolume->SetDisplayValueRange(TRange<float>(0.f,1.f));
+			OverallVolume->SetOutputValueRange(TRange<float>(0.f,2.f));
+			OverallVolume->SetSliderStepSize(0.01f);
+			OverallVolume->SetDefaultValueFromString(LexToString(1.f));
+			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			OverallVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());  //No Decimal: 50%  //One Decimal: 50.5%
+			//TODO:: Set data dynamic getter and setter for the data object
 
-			VolumeCategoryCollection->AddChildListData(TestItem);
+			VolumeCategoryCollection->AddChildListData(OverallVolume);
 		}
+		
 	}
 
 	RegisteredOptionsTabCollections.Add(AudioTabCollection);
