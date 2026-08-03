@@ -8,19 +8,19 @@
 
 APIXPlayerState::APIXPlayerState()
 {
-	// Create the ASC as a subobject — it will replicate automatically
+	// Create the ASC as a subobject ï¿½ it will replicate automatically
 
 	PIXAbilitySystemComponent = CreateDefaultSubobject<UPIXAbilitySystemComponent>(TEXT("PIXAbilitySystemComponent"));
 	PIXAbilitySystemComponent->SetIsReplicated(true);
 
-	// Create the AttributeSet — the ASC automatically discovers and registers
+	// Create the AttributeSet ï¿½ the ASC automatically discovers and registers
 	// any AttributeSet subobjects found on its owner
 
 	AttributeSet = CreateDefaultSubobject<UAS_CharacterAttributs>(TEXT("AttributeSet"));
 
-	// PlayerState ticks frequently — we can reduce this since
+	// PlayerState ticks frequently ï¿½ we can reduce this since
 	// GAS manages its own update cadence
-	NetUpdateFrequency = 100.f;
+	//NetUpdateFrequency = 100.f;
 
 }
 

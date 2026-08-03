@@ -3,6 +3,12 @@
 
 #include "IXProjectSettings/PIXGameUserSettings.h"
 
+UPIXGameUserSettings::UPIXGameUserSettings()
+	: OverallVolume(1.f)
+{
+	
+}
+
 UPIXGameUserSettings* UPIXGameUserSettings::Get()
 {
 	if (GEngine)
@@ -11,4 +17,10 @@ UPIXGameUserSettings* UPIXGameUserSettings::Get()
 	}
 	return nullptr;
 	
+}
+
+void UPIXGameUserSettings::SetOverallVolume(float InVolume)
+{
+	OverallVolume = InVolume;	
+	//The Actual logic for controlling volume goes here 
 }

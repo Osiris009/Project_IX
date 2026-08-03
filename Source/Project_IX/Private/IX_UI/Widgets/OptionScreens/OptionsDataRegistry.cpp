@@ -116,8 +116,8 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 
 
 		// Set the dynamic getter and setter for the GameDifficulty option using the macro
-		GameDifficulty->SetDtataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentGameDifficulty));
-		GameDifficulty->SetDtataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentGameDifficulty)); 
+		GameDifficulty->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentGameDifficulty));
+		GameDifficulty->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentGameDifficulty)); 
 		// Add the GameDifficulty option to the GameplayCollectionTab
 
 		GameDifficulty->SetShouldApplyChangeImimediately(true); // Set the option to apply changes immediately when modified	
@@ -125,8 +125,8 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 		GameplayCollectionTab->AddChildListData(GameDifficulty);
 		
 	}
-
-	////TestingOption
+	
+	//TestingOption
 	{
 		UListDataObject_String* TestingItem = NewObject<UListDataObject_String>();
 		TestingItem->SetDataID(FName("Testing"));
@@ -170,13 +170,17 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 			OverallVolume->SetDefaultValueFromString(LexToString(1.f));
 			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			OverallVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());  //No Decimal: 50%  //One Decimal: 50.5%
-			//TODO:: Set data dynamic getter and setter for the data object
+			
+			OverallVolume->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetOverallVolume));
+			OverallVolume->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetOverallVolume));
+			OverallVolume->SetShouldApplyChangeImimediately(true);
+			//TODO :: Set data dynamic getter and setter for the data object
 
 			VolumeCategoryCollection->AddChildListData(OverallVolume);
+			
 		}
 		
 	}
-
 	RegisteredOptionsTabCollections.Add(AudioTabCollection);
 }
 

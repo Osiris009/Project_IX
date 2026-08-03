@@ -9,11 +9,14 @@
 /**
  * 
  */
+
 UCLASS()
 class PROJECT_IX_API UPIXGameUserSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
 public:
+	
+	UPIXGameUserSettings();
 	
 	static UPIXGameUserSettings* Get();
 	
@@ -24,11 +27,26 @@ public:
 	// Sets the current game difficulty setting
 	UFUNCTION()
 	void SetCurrentGameDifficulty(const FString& NewDifficulty) { CurrentGameDifficulty = NewDifficulty; }
-
 	//*** GamePlay Collection Tabs ***//       
 
-private:
+	//*** Audio Collection Tabs ***//
 	
+	UFUNCTION()
+	float GetOverallVolume() const { return OverallVolume; }
+	
+	UFUNCTION()
+	void SetOverallVolume(float InVolume);
+	
+private:
+	//*** GamePlay Collection Tabs ***//
 	UPROPERTY(Config)
 	FString CurrentGameDifficulty; 
+	
+	//*** Audio Collection Tabs ***//
+	UPROPERTY(Config)
+	float OverallVolume;
+	
+	//*** Audio Collection Tabs ***//
+	
+	
 };

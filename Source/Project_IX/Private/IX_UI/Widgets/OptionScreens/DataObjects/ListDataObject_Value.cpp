@@ -5,13 +5,13 @@
 
 
 
-void UListDataObject_Value::SetDtataDynamicGetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicGetter)
+void UListDataObject_Value::SetDataDynamicGetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicGetter)
 {
 	DataDynamicGetter = InDynamicGetter;
 }
 
  
-void UListDataObject_Value::SetDtataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter)
+void UListDataObject_Value::SetDataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter)
 {
 	DataDynamicSetter = InDynamicSetter;
 }

@@ -16,9 +16,9 @@ class PROJECT_IX_API UListDataObject_Value : public UListDataObject_Base
 	
 public:
 
-	void SetDtataDynamicGetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicGetter);
+	void SetDataDynamicGetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicGetter);
 
-	void SetDtataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter);
+	void SetDataDynamicSetter(const TSharedPtr<FOptionDataInterationHelper>& InDynamicSetter);
 
 	
 	void SetDefaultValueFromString(const FString& InDefaultValue){
