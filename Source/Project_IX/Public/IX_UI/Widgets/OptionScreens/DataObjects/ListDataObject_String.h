@@ -44,3 +44,29 @@ public:
 	
 	FORCEINLINE FText GetCurrentDisplayText() const { return CurrentDisplayText; }
 };
+
+UCLASS()
+class PROJECT_IX_API UListDataObject_StringBool : public UListDataObject_String
+{
+	GENERATED_BODY()
+	
+public:
+	
+	void OverrideTrueDisplayText(const FText& InDisplayText);
+	void OverrideFalseDisplayText(const FText& InDisplayText);
+	
+	void SetTrueAsDefaultValue();
+	void SetFalseAsDefaultValue();
+	
+	
+protected:
+	
+	virtual void OnDataObjectInitialized() override;
+	
+private:
+	void TryInitBoolValues();
+	
+	const FString TrueString = "true";
+	const FString FalseString = "false";
+	
+};

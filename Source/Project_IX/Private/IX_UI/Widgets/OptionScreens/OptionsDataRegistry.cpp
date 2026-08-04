@@ -180,6 +180,44 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 			
 		}
 		
+		{
+			UListDataObject_Scalar* MusicVolume = NewObject<UListDataObject_Scalar>();
+			MusicVolume->SetDataID(FName("MusicVolume"));
+			MusicVolume->SetDataDisplayName(FText::FromString(TEXT("Music Volume")));
+			MusicVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description for Music Volume")));
+			MusicVolume->SetDisplayValueRange(TRange<float>(0.f,1.f));
+			MusicVolume->SetOutputValueRange(TRange<float>(0.f,2.f));
+			MusicVolume->SetSliderStepSize(0.01f);
+			MusicVolume->SetDefaultValueFromString(LexToString(1.f));
+			MusicVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			MusicVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());  //No Decimal: 50%  //One Decimal: 50.5%
+			MusicVolume->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetMusicVolume));
+			MusicVolume->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetMusicVolume));
+			MusicVolume->SetShouldApplyChangeImimediately(true);
+
+			VolumeCategoryCollection->AddChildListData(MusicVolume);
+		}
+		
+		{
+			UListDataObject_Scalar* SFXVolume = NewObject<UListDataObject_Scalar>();
+			SFXVolume->SetDataID(FName("SFXVolume"));
+			SFXVolume->SetDataDisplayName(FText::FromString(TEXT("SFX Volume")));
+			SFXVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description for SFX Volume")));
+			SFXVolume->SetDisplayValueRange(TRange<float>(0.f,1.f));
+			SFXVolume->SetOutputValueRange(TRange<float>(0.f,2.f));
+			SFXVolume->SetSliderStepSize(0.01f);
+			SFXVolume->SetDefaultValueFromString(LexToString(1.f));
+			SFXVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			SFXVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());  //No Decimal: 50%  //One Decimal: 50.5%
+			
+			SFXVolume->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetSFXVolume));
+			SFXVolume->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetSFXVolume));
+			SFXVolume->SetShouldApplyChangeImimediately(true);
+			//TODO :: Set data dynamic getter and setter for the data object
+
+			VolumeCategoryCollection->AddChildListData(SFXVolume);
+		}
+		
 	}
 	RegisteredOptionsTabCollections.Add(AudioTabCollection);
 }

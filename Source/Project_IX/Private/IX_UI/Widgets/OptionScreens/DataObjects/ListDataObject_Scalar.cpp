@@ -5,6 +5,33 @@
 #include "IX_UI/Widgets/OptionScreens/OptionDataInterationHelper.h"
 
 
+bool UListDataObject_Scalar::CanResetBackToDefaultValue() const
+{
+	if (HasDefaultValue() && DataDynamicGetter)
+	{
+		const float DefaultValue = StringToFloat(GetDefaultValueAsString());
+		const float CurrentValue = StringToFloat(DataDynamicGetter->GetValueAsString());
+		
+		return !FMath::IsNearlyEqual(DefaultValue, CurrentValue, 0.01f);
+		
+	}
+	return false;
+}
+
+bool UListDataObject_Scalar::TryResetBackToDefaultValue()
+{
+	if (CanResetBackToDefaultValue())
+	{
+		if (DataDynamicSetter)
+		{
+			DataDynamicSetter->SetValueFromString(GetDefaultValueAsString());
+			NotifyListDataModified(this, EOptionListDataModifyReason::ResetToDefault);
+			return true;
+		}
+	}
+	return false;
+}
+
 FCommonNumberFormattingOptions UListDataObject_Scalar::NoDecimal()
 {
 	FCommonNumberFormattingOptions Options;

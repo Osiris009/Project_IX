@@ -23,6 +23,9 @@ public:
 	LIST_DATA_ACCESSOR(ECommonNumericType,DisplayNumericType)
 	LIST_DATA_ACCESSOR(FCommonNumberFormattingOptions,NumberFormattingOptions)
 
+	virtual bool CanResetBackToDefaultValue() const override;
+	virtual bool TryResetBackToDefaultValue() override;
+	
 	static FCommonNumberFormattingOptions NoDecimal();
 	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
 	

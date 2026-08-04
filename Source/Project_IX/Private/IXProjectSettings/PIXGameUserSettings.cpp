@@ -5,6 +5,8 @@
 
 UPIXGameUserSettings::UPIXGameUserSettings()
 	: OverallVolume(1.f)
+	,MusicVolume(1.f)
+	,SFXVolume(1.f)
 {
 	
 }
@@ -23,4 +25,14 @@ void UPIXGameUserSettings::SetOverallVolume(float InVolume)
 {
 	OverallVolume = InVolume;	
 	//The Actual logic for controlling volume goes here 
+}
+
+void UPIXGameUserSettings::SetMusicVolume(float InVolume)
+{
+	MusicVolume = InVolume;
+}
+
+void UPIXGameUserSettings::SetSFXVolume(float InVolume)
+{
+	SFXVolume = InVolume;
 }
