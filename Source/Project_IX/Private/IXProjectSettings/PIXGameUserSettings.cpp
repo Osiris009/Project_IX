@@ -36,3 +36,13 @@ void UPIXGameUserSettings::SetSFXVolume(float InVolume)
 {
 	SFXVolume = InVolume;
 }
+
+void UPIXGameUserSettings::SetAllowBackgroundAudio(bool bIsAllowed)
+{
+	bAllowBackgroundAudio = bIsAllowed;
+}
+
+void UPIXGameUserSettings::SetUseHDRAudioMode(bool bIsAllowed)
+{
+	bUseHDRAudioMode = bIsAllowed;
+}

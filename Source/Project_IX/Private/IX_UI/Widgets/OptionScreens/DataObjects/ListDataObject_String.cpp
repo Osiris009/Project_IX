@@ -167,7 +167,7 @@ bool UListDataObject_String::TryResetBackToDefaultValue()
 }
 
 /*** ============================ 
-***UListDataObject_StringBool***
+*---UListDataObject_StringBool---*
 =================================***/
 
 void UListDataObject_StringBool::OverrideTrueDisplayText(const FText& InDisplayText)
@@ -193,7 +193,7 @@ void UListDataObject_StringBool::SetTrueAsDefaultValue()
 
 void UListDataObject_StringBool::SetFalseAsDefaultValue()
 {
-	SetDefaultValueFromString(FalseString);
+	SetDefaultValueFromString(FalseString); 
 }
 
 void UListDataObject_StringBool::OnDataObjectInitialized()

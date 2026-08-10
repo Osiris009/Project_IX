@@ -46,6 +46,18 @@ public:
 	UFUNCTION()
 	void SetSFXVolume(float InVolume);
 	
+	UFUNCTION()
+	bool GetAllowBackgroundAudio() const { return bAllowBackgroundAudio;}
+
+	UFUNCTION()
+	void SetAllowBackgroundAudio(bool bIsAllowed);
+	
+	UFUNCTION()
+	bool GetUseHDRAudioMode() const { return bUseHDRAudioMode;}
+
+	UFUNCTION()
+	void SetUseHDRAudioMode(bool bIsAllowed);
+	
 private:
 	//*** GamePlay Collection Tabs ***//
 	UPROPERTY(Config)
@@ -58,6 +70,12 @@ private:
 	float MusicVolume;
 	UPROPERTY(Config)
 	float SFXVolume;
+	
+	UPROPERTY(Config)
+	bool bAllowBackgroundAudio;
+	
+	UPROPERTY(Config)
+	bool bUseHDRAudioMode;
 	//*** Audio Collection Tabs ***//
 	
 };

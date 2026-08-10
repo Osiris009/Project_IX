@@ -219,6 +219,43 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 		}
 		
 	}
+	
+	//Sound Category
+	{
+		UListDataObject_Collection* SoundCategoryCollection = NewObject<UListDataObject_Collection>();
+		SoundCategoryCollection->SetDataID(FName("SoundCategoryCollection"));
+		SoundCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Sound")));
+		AudioTabCollection->AddChildListData(SoundCategoryCollection);
+		
+		//Allow Back Graound Sound
+		{
+			UListDataObject_StringBool* AllowBackgroundAudio = NewObject<UListDataObject_StringBool>();
+			AllowBackgroundAudio->SetDataID(FName("AllowBackgroundAudio"));
+			AllowBackgroundAudio->SetDataDisplayName(FText::FromString(TEXT("Allow Background Audio")));
+			AllowBackgroundAudio->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
+			AllowBackgroundAudio->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
+			AllowBackgroundAudio->SetFalseAsDefaultValue();
+			AllowBackgroundAudio->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetAllowBackgroundAudio));
+			AllowBackgroundAudio->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetAllowBackgroundAudio));
+			AllowBackgroundAudio->SetShouldApplyChangeImimediately(true);
+			
+			SoundCategoryCollection->AddChildListData(AllowBackgroundAudio);
+		}
+		
+		{
+			UListDataObject_StringBool* UseHDRAudioMode = NewObject<UListDataObject_StringBool>();
+			UseHDRAudioMode->SetDataID(FName("UseHDRAudioMode"));
+			UseHDRAudioMode->SetDataDisplayName(FText::FromString(TEXT("Use HDR Audio Mode")));
+			UseHDRAudioMode->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
+			UseHDRAudioMode->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
+			UseHDRAudioMode->SetFalseAsDefaultValue();
+			UseHDRAudioMode->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetUseHDRAudioMode));
+			UseHDRAudioMode->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetUseHDRAudioMode));
+			UseHDRAudioMode->SetShouldApplyChangeImimediately(true);
+			
+			SoundCategoryCollection->AddChildListData(UseHDRAudioMode);
+		}
+	}
 	RegisteredOptionsTabCollections.Add(AudioTabCollection);
 }
 
