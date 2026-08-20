@@ -9,6 +9,8 @@
 #include "InputActionValue.h"
 #include "IX_UI/Widgets/Consumable/Widget_ConsumableSelector.h"
 #include "IX_UI/IX_UISubsystem.h"
+#include "IXProjectSettings/PIXGameUserSettings.h"
+
 
 void ABasePlayerController::BeginPlay()
 {
@@ -22,6 +24,15 @@ void ABasePlayerController::BeginPlay()
 	{
 		SetViewTarget(FoundCamera[0]);
 	}
+	
+	UPIXGameUserSettings* GameUserSettings = UPIXGameUserSettings::Get();
+	
+	if (GameUserSettings->GetLastCPUBenchmarkResult() == -1.f || GameUserSettings->GetLastGPUBenchmarkResult() == -1.f)
+	{
+		GameUserSettings->RunHardwareBenchmark();
+		GameUserSettings->ApplyHardwareBenchmarkResults();
+	}
+	
 }
 
 

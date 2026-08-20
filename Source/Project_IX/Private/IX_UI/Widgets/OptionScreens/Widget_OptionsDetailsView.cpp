@@ -8,6 +8,7 @@
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Base.h"
 
 
+
 void UWidget_OptionsDetailsView::UpdateDetailsViewInfo(UListDataObject_Base* InDataObject, const FString& InEntryWidgetClassName)
 {
 	if (!InDataObject)
