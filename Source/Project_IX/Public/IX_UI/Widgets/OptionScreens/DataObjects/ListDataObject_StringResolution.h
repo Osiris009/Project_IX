@@ -1,0 +1,22 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_String.h"
+#include "ListDataObject_StringResolution.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PROJECT_IX_API UListDataObject_StringResolution : public UListDataObject_String
+{
+	GENERATED_BODY()
+
+public:
+	void InitResolutionValues();
+
+protected:
+	virtual void OnDataObjectInitialized() override;
+};

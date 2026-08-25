@@ -12,6 +12,7 @@
 #include "IXFuctionLibrary/UIFunctionLibrary.h"
 #include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_Scalar.h"
 
+#include "IX_UI/Widgets/OptionScreens/DataObjects/ListDataObject_StringResolution.h"
 
 
 
@@ -265,6 +266,49 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 	VideoCollectionTab->SetDataID(FName("VideoCollectionTab"));
 	VideoCollectionTab->SetDataDisplayName(FText::FromString("Video"));	
 	RegisteredOptionsTabCollections.Add(VideoCollectionTab);
+	
+	{
+		UListDataObject_Collection* DisplayCategoryCollection = NewObject<UListDataObject_Collection>();
+		DisplayCategoryCollection->SetDataID(FName("DisplayCategoryCollection"));
+		DisplayCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Display")));
+		
+		VideoCollectionTab->AddChildListData(DisplayCategoryCollection);
+		
+		//Window Mode
+		{
+			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
+			WindowMode->SetDataID(FName("WindowMode"));
+			WindowMode->SetDataDisplayName(FText::FromString(TEXT("Window Mode")));
+			WindowMode->SetDescriptionRichText(FText::FromString(TEXT("Window Mode")));
+			WindowMode->AddEnumOption(EWindowMode::Fullscreen, FText::FromString(TEXT("Fullscreen Mode")));
+			WindowMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless Mode")));
+			WindowMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed Mode")));
+			WindowMode->SetDefaultValueFromEnumOption(EWindowMode::WindowedFullscreen);
+			WindowMode->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetFullscreenMode));
+			WindowMode->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetFullscreenMode));
+			WindowMode->SetShouldApplyChangeImimediately(true);
+			
+			DisplayCategoryCollection->AddChildListData(WindowMode);
+			
+		}
+		
+		//Screen Resultion
+		{
+			UListDataObject_StringResolution* ScreenResolution = NewObject<UListDataObject_StringResolution>();
+			ScreenResolution->SetDataID(FName("ScreenResolution"));
+			ScreenResolution->SetDataDisplayName(FText::FromString(TEXT("Screen Resolution")));
+			ScreenResolution->SetDescriptionRichText(FText::FromString(TEXT("Resolution")));
+			ScreenResolution->InitResolutionValues();
+			ScreenResolution->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetScreenResolution));
+			ScreenResolution->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetScreenResolution));
+			ScreenResolution->SetShouldApplyChangeImimediately(true);
+			
+			DisplayCategoryCollection->AddChildListData(ScreenResolution);
+		}
+		
+	
+	}
+	
 }
 
 void UOptionsDataRegistry::InitControlsCollectionTab()

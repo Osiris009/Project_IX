@@ -6,9 +6,7 @@
 #include "GameFramework/GameUserSettings.h"
 #include "PIXGameUserSettings.generated.h"
 
-/**
- * 
- */
+
 
 UCLASS()
 class PROJECT_IX_API UPIXGameUserSettings : public UGameUserSettings

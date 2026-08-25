@@ -28,16 +28,19 @@ protected:
 
 	//~Form UListDataObject base
 	virtual void OnDataObjectInitialized() override;
+	virtual bool CanResetBackToDefaultValue() const override;
+	virtual bool TryResetBackToDefaultValue() override;
+	
 	
 	bool TrySetDisplayTextFromStringValue(const FString& InStringValue);
+	
 	FString CurrentStringValue;
 	FText CurrentDisplayText;
 	
 	TArray<FString> AvailableOptionStringArray;
 	TArray<FText> AvailableOptionTextArray;
 
-	virtual bool CanResetBackToDefaultValue() const override;
-	virtual bool TryResetBackToDefaultValue() override;
+	
 public:
 	//~Form UListDataObject base 
 	FORCEINLINE const TArray<FText>& GetAvailableOptionTextArray() const { return AvailableOptionTextArray;}
