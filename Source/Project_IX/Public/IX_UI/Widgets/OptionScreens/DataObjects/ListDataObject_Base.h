@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "IX_UI/Extra/UIEnumTypes.h"
+#include "IX_UI/Extra/PIXUIStructType.h"
 #include "ListDataObject_Base.generated.h"
 
 

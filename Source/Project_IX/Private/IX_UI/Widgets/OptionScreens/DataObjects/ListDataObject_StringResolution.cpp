@@ -5,17 +5,29 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProjectDebugHelper.h"
 #include "IX_UI/Widgets/OptionScreens/OptionDataInterationHelper.h"
-
+#include "IXProjectSettings/PIXGameUserSettings.h"
 
 void UListDataObject_StringResolution::InitResolutionValues()
 {
 	TArray<FIntPoint> AvailableResolutions;
 	UKismetSystemLibrary::GetSupportedFullscreenResolutions(AvailableResolutions);
 	
+	AvailableResolutions.Sort(
+		[](const FIntPoint& A, const FIntPoint& B)->bool
+		{
+			return A.SizeSquared()<B.SizeSquared();
+		}
+	);
+	
 	for (const FIntPoint Resolution : AvailableResolutions)
 	{
-		Debug::Print(TEXT("Avaialble Resolution: ") + Resolution.ToString());
+		//Debug::Print(TEXT("Avaialble Resolution: ") + Resolution.ToString());
+		AddDynamicOption(ResToValueString(Resolution), ResToDisplayText(Resolution));
 	}
+	
+	MaximumAllowedResolution = ResToValueString(AvailableResolutions.Last());
+	
+	SetDefaultValueFromString(MaximumAllowedResolution);
 	
 }
 
@@ -24,11 +36,22 @@ void UListDataObject_StringResolution::OnDataObjectInitialized()
 	
 	Super::OnDataObjectInitialized();
 	
-	if (DataDynamicGetter)
+	if(!TrySetDisplayTextFromStringValue(MaximumAllowedResolution))
 	{
-		//We Got Value like this from the DynamicGetter: (X=2560,Y=1440)
-		Debug::Print(TEXT("Resolution value  from the DynamicGetter: ") + DataDynamicGetter->GetValueAsString());
-		//DataDynamicGetter->GetValueAsString()
+		//CurrentDisplayText
+		CurrentDisplayText = ResToDisplayText(UPIXGameUserSettings::Get()->GetScreenResolution());
 	}
 	
+} 
+
+FString UListDataObject_StringResolution::ResToValueString(const FIntPoint& InResolution) const
+{
+	return FString::Printf(TEXT("(X=%i, Y=%i)"), InResolution.X, InResolution.Y);
+	
+}
+
+FText UListDataObject_StringResolution::ResToDisplayText(const FIntPoint& InResolution) const
+{
+	const FString DisplayString = FString::Printf(TEXT("%i x %i"), InResolution.X, InResolution.Y);
+	return FText::FromString(DisplayString);
 }
