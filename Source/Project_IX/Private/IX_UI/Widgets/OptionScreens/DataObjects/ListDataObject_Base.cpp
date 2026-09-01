@@ -10,6 +10,52 @@ void UListDataObject_Base::InitDataObject()
 	
 }
 
+void UListDataObject_Base::AddEditConditionDescription(const FOptionDataEditConditionDescription& InEditCondition)
+{
+	EditConditionDescArray.Add(InEditCondition);
+}
+
+bool UListDataObject_Base::IsDataCurrentlyEditable()
+{
+	bool bIsEditable = true;
+
+	if (!EditConditionDescArray.IsEmpty()) 
+	{
+		return bIsEditable;
+	}
+
+	FString CachedDisabledRichReason;
+
+	for (const FOptionDataEditConditionDescription& Condition : EditConditionDescArray)
+	{
+		if ( !Condition.IsValid() || Condition.IsEditContionMet())
+		{
+			continue;
+		}
+
+		bIsEditable = false;
+
+		CachedDisabledRichReason.Append(Condition.GetDisabledForcedStringValue());
+		SetDisabledReachText(FText::FromString(CachedDisabledRichReason));
+
+		if (Condition.HasForcedStringValue())
+		{
+			const FString ForcedStringValue = Condition.GetDisabledForcedStringValue();
+			
+			// Check if the data object can be set to the forced string value
+
+			if (CanSetToForcedStringValue(ForcedStringValue))
+			{
+				OnSetToForcedStringValue(ForcedStringValue);
+			}
+		}
+		
+
+	}
+
+	return bIsEditable;
+}
+
 void UListDataObject_Base::OnDataObjectInitialized()
 {
 }

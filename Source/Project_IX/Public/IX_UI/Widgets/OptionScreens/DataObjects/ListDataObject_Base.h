@@ -49,6 +49,11 @@ public:
 	virtual bool CanResetBackToDefaultValue() const { return false; }
 	virtual bool TryResetBackToDefaultValue() { return false; }
 
+
+	void AddEditConditionDescription(const FOptionDataEditConditionDescription& InEditCondition);
+
+	bool IsDataCurrentlyEditable();
+
 protected:
 	
 	//
@@ -56,6 +61,10 @@ protected:
 	
 	virtual void NotifyListDataModified(UListDataObject_Base* ModifiedData, 
 		EOptionListDataModifyReason ModifyReason = EOptionListDataModifyReason::DirectlyModified);
+	
+	virtual bool CanSetToForcedStringValue(const FString& InForcedValue) const { return false; }
+
+	virtual void OnSetToForcedStringValue(const FString& InForcedValue) {}
 
 private:
 	
@@ -70,4 +79,8 @@ private:
 	
 	bool bShouldApplyChangeImimediately = false;
 	
+	UPROPERTY(Transient)
+	TArray<FOptionDataEditConditionDescription>EditConditionDescArray;
+
+
 };
