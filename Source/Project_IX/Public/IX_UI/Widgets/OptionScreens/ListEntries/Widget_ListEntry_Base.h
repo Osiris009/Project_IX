@@ -46,6 +46,10 @@ protected:
 
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
 
+	//Child Should Override and Super Call is expected to handle the editable state change. 
+	// This function is called when the data object is modified and the editable state changes
+	virtual void OnToggleEditableState(bool bIsEditable);
+
 	void SelectThisListEntryWidget();
 
 private:

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class Project_IXEditorTarget : TargetRules
 {
-	public Project_IXEditorTarget( TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V6;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
-		ExtraModuleNames.Add("Project_IX");
-	}
+    public Project_IXEditorTarget(TargetInfo Target) : base(Target)
+    {
+        Type = TargetType.Editor;
+        DefaultBuildSettings = BuildSettingsVersion.V7;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_8;
+        ExtraModuleNames.Add("Project_IX");
+    }
 }

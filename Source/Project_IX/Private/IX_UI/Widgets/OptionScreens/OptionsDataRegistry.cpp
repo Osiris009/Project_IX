@@ -274,6 +274,16 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 		
 		VideoCollectionTab->AddChildListData(DisplayCategoryCollection);
 		
+		FOptionDataEditConditionDescription PackegedBuildOnlyCondition;
+		PackegedBuildOnlyCondition.SetEditCondition(
+			[]()->bool
+			{
+				const bool bIsInEditor = GIsEditor || GIsPlayInEditorWorld;
+				return !bIsInEditor;
+			});
+
+		PackegedBuildOnlyCondition.SetDisabledRichReason(TEXT("This option is only available in packaged builds."));
+
 		//Window Mode
 		{
 			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
@@ -288,6 +298,8 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 			WindowMode->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetFullscreenMode));
 			WindowMode->SetShouldApplyChangeImimediately(true);
 			
+			WindowMode->AddEditConditionDescription(PackegedBuildOnlyCondition);
+
 			DisplayCategoryCollection->AddChildListData(WindowMode);
 			
 		}
@@ -303,6 +315,8 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 			ScreenResolution->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetScreenResolution));
 			ScreenResolution->SetShouldApplyChangeImimediately(true);
 			
+			ScreenResolution->AddEditConditionDescription(PackegedBuildOnlyCondition);
+
 			DisplayCategoryCollection->AddChildListData(ScreenResolution);
 		}
 		

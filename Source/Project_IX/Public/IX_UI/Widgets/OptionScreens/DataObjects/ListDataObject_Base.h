@@ -64,6 +64,7 @@ protected:
 	
 	virtual bool CanSetToForcedStringValue(const FString& InForcedValue) const { return false; }
 
+
 	virtual void OnSetToForcedStringValue(const FString& InForcedValue) {}
 
 private:

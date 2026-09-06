@@ -41,6 +41,9 @@ void UWidget_ListEntry_Base::OnOwningListDataObjectSet(UListDataObject_Base* InO
 	{
 		InOwningListDataObject->OnListDataModified.AddUObject(this, &ThisClass::OnOwningListDataObjectModified);
 	}
+
+	OnToggleEditableState(InOwningListDataObject->IsDataCurrentlyEditable());
+
 }
 
 void UWidget_ListEntry_Base::OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason)
@@ -64,6 +67,14 @@ FReply UWidget_ListEntry_Base::NativeOnFocusReceived(const FGeometry& InGeometry
 	}
 
 	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
+}
+
+void UWidget_ListEntry_Base::OnToggleEditableState(bool bIsEditable)
+{
+	if (CommonText_SettingDisplayName)
+	{
+		CommonText_SettingDisplayName->SetIsEnabled(bIsEditable);
+	}
 }
 
 void UWidget_ListEntry_Base::SelectThisListEntryWidget()

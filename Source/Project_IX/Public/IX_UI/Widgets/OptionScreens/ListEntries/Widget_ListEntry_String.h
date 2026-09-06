@@ -25,8 +25,11 @@ protected:
 
 	virtual void OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason) override;
 
-private:
+	//~ End UWidget interface
+	virtual void OnToggleEditableState(bool bIsEditable) override;
 
+private:
+	 
 	void OnPreviousOptionButtonClicked();
 	void OnNextOptionButtonClicked();
 
