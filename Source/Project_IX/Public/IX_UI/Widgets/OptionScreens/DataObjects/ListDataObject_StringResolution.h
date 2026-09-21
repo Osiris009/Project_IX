@@ -27,4 +27,10 @@ private:
 	
 	FString MaximumAllowedResolution;
 	
+public:
+
+	FORCEINLINE const FString& GetMaximumAllowedResolution() const {
+		return MaximumAllowedResolution;
+	}
+
 };

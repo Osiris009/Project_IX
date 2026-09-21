@@ -10,7 +10,7 @@ void UListDataObject_Base::InitDataObject()
 	
 }
 
-void UListDataObject_Base::AddEditConditionDescription(const FOptionDataEditConditionDescription& InEditCondition)
+void UListDataObject_Base::AddEditCondition(const FOptionsDataEditConditionDescriptor& InEditCondition)
 {
 	EditConditionDescArray.Add(InEditCondition);
 }
@@ -19,46 +19,48 @@ bool UListDataObject_Base::IsDataCurrentlyEditable()
 {
 	bool bIsEditable = true;
 
-	if (!EditConditionDescArray.IsEmpty()) 
+	if (EditConditionDescArray.IsEmpty())
 	{
 		return bIsEditable;
 	}
 
 	FString CachedDisabledRichReason;
 
-	for (const FOptionDataEditConditionDescription& Condition : EditConditionDescArray)
+	for (const FOptionsDataEditConditionDescriptor& Condition : EditConditionDescArray)
 	{
-		if ( !Condition.IsValid() || Condition.IsEditContionMet())
+		if (!Condition.IsValid() || Condition.IsEditConditionMet())
 		{
 			continue;
 		}
 
 		bIsEditable = false;
 
-		CachedDisabledRichReason.Append(Condition.GetDisabledForcedStringValue());
+		CachedDisabledRichReason.Append(Condition.GetDisabledRichReason());
+
+		
 		SetDisabledReachText(FText::FromString(CachedDisabledRichReason));
 
 		if (Condition.HasForcedStringValue())
 		{
 			const FString ForcedStringValue = Condition.GetDisabledForcedStringValue();
-			
-			// Check if the data object can be set to the forced string value
 
+			//If the current value this data object has can be set to the forced value
 			if (CanSetToForcedStringValue(ForcedStringValue))
 			{
 				OnSetToForcedStringValue(ForcedStringValue);
 			}
 		}
-		
-
 	}
 
 	return bIsEditable;
 }
 
+
 void UListDataObject_Base::OnDataObjectInitialized()
 {
+
 }
+
 
 void UListDataObject_Base::NotifyListDataModified(UListDataObject_Base* ModifiedData, 
 	EOptionListDataModifyReason ModifyReason)

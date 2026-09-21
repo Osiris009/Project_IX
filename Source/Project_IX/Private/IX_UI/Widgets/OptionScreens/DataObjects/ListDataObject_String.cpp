@@ -202,6 +202,26 @@ void UListDataObject_StringBool::OnDataObjectInitialized()
 	Super::OnDataObjectInitialized();
 }
 
+bool UListDataObject_StringBool::CanSetToForcedStringValue(const FString& InForcedValue) const
+{
+	return CurrentStringValue != InForcedValue;
+
+}
+
+void UListDataObject_StringBool::OnSetToForcedStringValue(const FString& InForcedValue)
+{
+	CurrentStringValue = InForcedValue;
+	TrySetDisplayTextFromStringValue(CurrentStringValue);
+
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(CurrentStringValue);
+
+		NotifyListDataModified(this, EOptionListDataModifyReason::DependencyModified);
+	}
+
+}
+
 void UListDataObject_StringBool::TryInitBoolValues()
 {
 	if (!AvailableOptionStringArray.Contains(TrueString))

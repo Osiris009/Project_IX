@@ -50,7 +50,7 @@ public:
 	virtual bool TryResetBackToDefaultValue() { return false; }
 
 
-	void AddEditConditionDescription(const FOptionDataEditConditionDescription& InEditCondition);
+	void AddEditCondition(const FOptionsDataEditConditionDescriptor& InEditCondition);
 
 	bool IsDataCurrentlyEditable();
 
@@ -81,7 +81,7 @@ private:
 	bool bShouldApplyChangeImimediately = false;
 	
 	UPROPERTY(Transient)
-	TArray<FOptionDataEditConditionDescription>EditConditionDescArray;
+	TArray<FOptionsDataEditConditionDescriptor>EditConditionDescArray;
 
 
 };
