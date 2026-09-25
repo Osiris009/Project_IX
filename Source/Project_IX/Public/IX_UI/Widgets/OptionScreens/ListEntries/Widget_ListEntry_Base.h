@@ -10,6 +10,7 @@
 #include "Widget_ListEntry_Base.generated.h"
 
 
+
 class UCommonTextBlock;
 class UListDataObject_Base; 
 
@@ -44,6 +45,8 @@ protected:
 	//This child class should override this function to update the ui values after the data object has been modified. Super call not needed 
 	virtual void OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionListDataModifyReason ModifyReason);
 
+	virtual void OnOwningDependencyDataObjectModified(UListDataObject_Base* OwningModifiedDependencyData, EOptionListDataModifyReason ModifyReason);
+
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
 
 	//Child Should Override and Super Call is expected to handle the editable state change. 
@@ -56,5 +59,10 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = "true"))
 	UCommonTextBlock* CommonText_SettingDisplayName;
+
+	//Transient type because this is a cached reference to the data object that owns this list entry widget.
+	//It is not meant to be serialized or saved, and it will be re-established when the widget is initialized with a new data object.
+	UPROPERTY(Transient)
+	UListDataObject_Base* CachedOwningDataObject;
 
 };

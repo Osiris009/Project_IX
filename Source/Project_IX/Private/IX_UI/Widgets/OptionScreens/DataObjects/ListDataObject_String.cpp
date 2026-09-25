@@ -94,9 +94,9 @@ void UListDataObject_String::OnRotatorInitiatedValueChanged(const FText& InNewSe
 		if (DataDynamicSetter)
 		{
 			DataDynamicSetter->SetValueFromString(CurrentStringValue);
-			
+
 			NotifyListDataModified(this);
-		} 
+		}
 	}
 	
 
@@ -107,7 +107,8 @@ void UListDataObject_String::OnDataObjectInitialized()
 	if (!AvailableOptionStringArray.IsEmpty())
 	{
 		CurrentStringValue = AvailableOptionStringArray[0];
-		//Debug::Print(FString::Printf(TEXT("UListDataObject_String::OnDataObjectInitialized: CurrentStringValue set to %s"), *CurrentStringValue), 5.f, FColor::Green);
+		//Debug::Print(FString::Printf(TEXT("UListDataObject_String::OnDataObjectInitialized: 
+		// CurrentStringValue set to %s"), *CurrentStringValue), 5.f, FColor::Green);
 	}
 	
 	//TODO :: Read from the saved string value and use it to set the CurrentStringValue  
@@ -121,6 +122,7 @@ void UListDataObject_String::OnDataObjectInitialized()
 		
 	}
 
+	
 	if(!TrySetDisplayTextFromStringValue(CurrentStringValue))
 	{
 		CurrentDisplayText = FText::FromString(TEXT("InValidOption"));

@@ -55,6 +55,14 @@ bool UListDataObject_Base::IsDataCurrentlyEditable()
 	return bIsEditable;
 }
 
+void UListDataObject_Base::AddEditDependencyData(UListDataObject_Base* InDependencyData)
+{
+	if (!InDependencyData->OnListDataModified.IsBoundToObject(this)) 
+	{
+		InDependencyData->OnListDataModified.AddUObject(this, &ThisClass::OnEditDependencyDataModified) ;
+	}
+}
+
 
 void UListDataObject_Base::OnDataObjectInitialized()
 {
@@ -62,12 +70,20 @@ void UListDataObject_Base::OnDataObjectInitialized()
 }
 
 
-void UListDataObject_Base::NotifyListDataModified(UListDataObject_Base* ModifiedData, 
-	EOptionListDataModifyReason ModifyReason)
+void UListDataObject_Base::NotifyListDataModified(UListDataObject_Base* ModifiedData, EOptionListDataModifyReason ModifyReason)
 {
 	OnListDataModified.Broadcast(ModifiedData, ModifyReason);
+
 	if (bShouldApplyChangeImimediately)
 	{
 		UPIXGameUserSettings::Get()->ApplySettings(true);
 	}
 }
+
+//This function is called when the dependency data object is modified.
+// It broadcasts the OnDependencyDataModified delegate to notify any listeners that the dependency data has been modified.
+void UListDataObject_Base::OnEditDependencyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionListDataModifyReason ModifyReason)
+{
+	OnDependencyDataModified.Broadcast(ModifiedDependencyData, ModifyReason);
+}
+
