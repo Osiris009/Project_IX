@@ -46,3 +46,20 @@ void UPIXGameUserSettings::SetUseHDRAudioMode(bool bIsAllowed)
 {
 	bUseHDRAudioMode = bIsAllowed;
 }
+
+float UPIXGameUserSettings::GetCurrentDisplayGamma() const
+{
+	if (GEngine)
+	{
+		return GEngine->GetDisplayGamma();
+	}
+	return 0.0f;
+}
+
+void UPIXGameUserSettings::SetCurrentDisplayGamma(float InNewGamma)
+{
+	if (GEngine)
+	{
+		GEngine->DisplayGamma = InNewGamma;
+	}
+}

@@ -332,16 +332,52 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 				}
 
 			);
+
+			// Set the disabled reason and forced value for the ScreenResolution option when the edit condition is not met
 			WindowModeEditCondition.SetDisabledRichReason(TEXT("\n\n<Disabled>Screen Resolution is not adjustable when the 'Window Mode' is set to Borderless Window.The value must match with the maximum allowed resolution.</>"));
 			WindowModeEditCondition.SetDisabledForcedStringValue(ScreenResolution->GetMaximumAllowedResolution());
-		 
+			// Add the WindowModeEditCondition to the ScreenResolution option
 			ScreenResolution->AddEditCondition(WindowModeEditCondition);
-
+			// Add the WindowMode as a dependency for the ScreenResolution option
 			ScreenResolution->AddEditDependencyData(CreatedWindowMode);
-
+			// Add the ScreenResolution option to the DisplayCategoryCollection
 			DisplayCategoryCollection->AddChildListData(ScreenResolution);
+
+
 		}
-																				
+		
+
+		////Graphics Category
+		{
+			UListDataObject_Collection* GraphicsCategoryCollection = NewObject<UListDataObject_Collection>();
+			GraphicsCategoryCollection->SetDataID(FName("GraphicsCategoryCollection"));
+			GraphicsCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Graphics")));
+
+			VideoCollectionTab->AddChildListData(GraphicsCategoryCollection);
+
+
+			//Display Gamma
+			{
+				UListDataObject_Scalar* DisplayGamma = NewObject<UListDataObject_Scalar>();
+				DisplayGamma->SetDataID(FName("DisplayGamma"));
+				DisplayGamma->SetDataDisplayName(FText::FromString(TEXT("Brightness")));
+				DisplayGamma->SetDescriptionRichText(FText::FromString(TEXT("This is description for Brightness")));
+				DisplayGamma->SetDisplayValueRange(TRange<float>(0.f, 1.f));
+				//The default value Unreal has is: 2.2f
+				DisplayGamma->SetOutputValueRange(TRange<float>(1.7f, 2.7f)); 
+				DisplayGamma->SetDisplayNumericType(ECommonNumericType::Percentage);
+				DisplayGamma->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+				DisplayGamma->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetCurrentDisplayGamma));
+				DisplayGamma->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetCurrentDisplayGamma));
+				DisplayGamma->SetDefaultValueFromString(LexToString(2.2f));
+
+				GraphicsCategoryCollection->AddChildListData(DisplayGamma);
+
+			}
+
+		}
+
+
 	}
 												
 	RegisteredOptionsTabCollections.Add(VideoCollectionTab);

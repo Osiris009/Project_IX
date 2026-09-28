@@ -67,6 +67,11 @@ void UWidget_ListEntry_Base::OnOwningDependencyDataObjectModified(UListDataObjec
 
 }
 
+
+
+
+
+
 FReply UWidget_ListEntry_Base::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
 {
 	UCommonInputSubsystem* CommonInputSubsystem = GetInputSubsystem();
@@ -80,7 +85,7 @@ FReply UWidget_ListEntry_Base::NativeOnFocusReceived(const FGeometry& InGeometry
 				return FReply::Handled().SetUserFocus(SlateWidgetToFocus.ToSharedRef());
 			}
 		}
-	}
+	} 
 
 	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
 }

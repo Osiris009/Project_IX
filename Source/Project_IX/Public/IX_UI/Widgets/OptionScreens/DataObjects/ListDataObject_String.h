@@ -78,6 +78,14 @@ private:
 	const FString FalseString = "false";
 };
 
+
+/*
+	String Enum Data Object is a data object that allows you to add enum options
+	to the list data object. It will convert the enum value to string and add it to
+	the available option string array. It will also convert the string back
+	to enum when getting the current value as enum. The child class can use 
+	this data object to create a list data object that can be used to select an enum value from a list of options.
+*/
 UCLASS()
 class PROJECT_IX_API UListDataObject_StringEnum : public UListDataObject_String
 {
