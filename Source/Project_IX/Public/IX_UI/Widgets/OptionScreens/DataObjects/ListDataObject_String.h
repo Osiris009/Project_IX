@@ -120,3 +120,25 @@ public:
 	}
 	
 };
+
+
+
+UCLASS()
+class PROJECT_IX_API UListDataObject_StringInteger : public UListDataObject_String
+{
+	GENERATED_BODY()
+
+public:
+
+	void AddIntegerOption(int32 InIntegerValue, const FText& InDisplayText); 
+	
+protected:
+
+	//~Form UListDataObject base
+	virtual void OnDataObjectInitialized() override;
+
+	//The child class should override this to specify how to handle the dependency data modified event
+	virtual void OnEditDependencyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionListDataModifyReason ModifyReason) override;
+
+	//~Form UListDataObject_String base
+};

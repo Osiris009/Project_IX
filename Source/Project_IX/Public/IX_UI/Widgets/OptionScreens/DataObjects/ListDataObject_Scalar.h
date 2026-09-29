@@ -31,6 +31,8 @@ public:
 	
 	float GetCurrentValue() const;
 	void SetCurrentValueFromSlider(float InCurrentValue);
+
+
 private:
 	
 	float StringToFloat(const FString& InString) const;
@@ -40,5 +42,7 @@ private:
 	float SliderStepSize = 0.1f;
 	ECommonNumericType DisplayNumericType = ECommonNumericType::Number;
 	FCommonNumberFormattingOptions NumberFormattingOptions;
+
+	virtual void OnEditDependencyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionListDataModifyReason ModifyReason) override ;
 	
 };

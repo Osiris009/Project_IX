@@ -236,3 +236,40 @@ void UListDataObject_StringBool::TryInitBoolValues()
 	}
 }
 
+
+/*	============================
+	UListDataObject_StringInteger
+	=============================	*/
+
+void UListDataObject_StringInteger::AddIntegerOption(int32 InIntegerValue, const FText& InDisplayText)
+{
+	AddDynamicOption(LexToString(InIntegerValue),InDisplayText);
+
+}
+
+void UListDataObject_StringInteger::OnDataObjectInitialized()
+{
+	Super::OnDataObjectInitialized();
+	if (!TrySetDisplayTextFromStringValue(CurrentStringValue))
+	{
+		CurrentDisplayText = FText::FromString(TEXT("Custom"));
+	}
+
+}
+
+void UListDataObject_StringInteger::OnEditDependencyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionListDataModifyReason ModifyReason)
+{
+	if (DataDynamicGetter)
+	{
+		CurrentStringValue = DataDynamicGetter->GetValueAsString();
+
+		if (!TrySetDisplayTextFromStringValue(CurrentStringValue))
+		{
+			CurrentDisplayText = FText::FromString(TEXT("Custom"));
+		}
+
+		NotifyListDataModified(this, EOptionListDataModifyReason::DependencyModified);
+	}
+
+	Super::OnEditDependencyDataModified(ModifiedDependencyData, ModifyReason);
+}

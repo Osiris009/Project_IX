@@ -375,13 +375,57 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 
 			}
 
+			UListDataObject_StringInteger* CreatedOverallQuality = nullptr;
+
+			//OverAll Graphics Quality
+			{
+				UListDataObject_StringInteger* OverallQuality = NewObject<UListDataObject_StringInteger>();
+				OverallQuality->SetDataID(FName("OverallQuality"));
+				OverallQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
+				OverallQuality->SetDescriptionRichText(FText::FromString(TEXT("This is description for Overall Graphics Quality")));
+
+				OverallQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+				OverallQuality->AddIntegerOption(1, FText::FromString(TEXT("Normal")));
+				OverallQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+				OverallQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+				OverallQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinematic")));
+				
+				OverallQuality->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetOverallScalabilityLevel));
+				OverallQuality->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetOverallScalabilityLevel));
+
+				OverallQuality->SetShouldApplyChangeImimediately(true);
+				//TODO :: Set data dynamic getter and setter for the data object
+				GraphicsCategoryCollection->AddChildListData(OverallQuality);
+
+				CreatedOverallQuality = OverallQuality;
+			}
+
+			//Resolution Scale
+			{
+				UListDataObject_Scalar* ResolutionScale = NewObject<UListDataObject_Scalar>();
+				ResolutionScale->SetDataID(FName("ResolutionScale"));
+				ResolutionScale->SetDataDisplayName(FText::FromString(TEXT("3D Resolution")));
+				ResolutionScale->SetDescriptionRichText(FText::FromString(TEXT("This is description for ResolutionScale")));
+				ResolutionScale->SetDisplayValueRange(TRange<float>(0.f, 1.f));
+				ResolutionScale->SetOutputValueRange(TRange<float>(0.f, 1.f));
+				ResolutionScale->SetDisplayNumericType(ECommonNumericType::Percentage);
+				ResolutionScale->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+				ResolutionScale->SetDataDynamicGetter(MAKE_OPTION_DATA_CONTROL(GetResolutionScaleNormalized));
+				ResolutionScale->SetDataDynamicSetter(MAKE_OPTION_DATA_CONTROL(SetResolutionScaleNormalized));
+				ResolutionScale->SetShouldApplyChangeImimediately(true);
+
+				ResolutionScale->AddEditDependencyData(CreatedOverallQuality);
+
+				GraphicsCategoryCollection->AddChildListData(ResolutionScale);
+			}
+
+
+
+		
+
 		}
-
-
-	}
-												
+	}												
 	RegisteredOptionsTabCollections.Add(VideoCollectionTab);
-
 }
 
 
