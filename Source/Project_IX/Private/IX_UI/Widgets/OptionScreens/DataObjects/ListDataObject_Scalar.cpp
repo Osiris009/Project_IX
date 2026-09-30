@@ -93,3 +93,4 @@ void UListDataObject_Scalar::OnEditDependencyDataModified(UListDataObject_Base* 
 
 	Super::OnEditDependencyDataModified(ModifiedDependencyData, ModifyReason);
 }
+     
