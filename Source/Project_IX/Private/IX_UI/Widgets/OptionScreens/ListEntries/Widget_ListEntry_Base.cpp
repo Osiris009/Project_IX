@@ -9,7 +9,7 @@
 
 void UWidget_ListEntry_Base::NativeOnListEntryWidgetHovered(bool bWasHovered)
 {
-	BP_OnOwningListDataObjectSet(bWasHovered, IsListItemSelected());
+	BP_OnOwningListDataObjectSet(bWasHovered, GetListItem()? IsListItemSelected() : false);
 }
 
 void UWidget_ListEntry_Base::NativeOnListItemObjectSet(UObject* ListItemObject)
