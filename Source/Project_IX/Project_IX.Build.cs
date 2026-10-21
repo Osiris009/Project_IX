@@ -21,12 +21,14 @@ public class Project_IX : ModuleRules
             "CommonInput",
             "EnhancedInput",
             "PropertyPath"
+
         });
 
         PrivateDependencyModuleNames.AddRange(new string[]
         {
             "Slate",
             "SlateCore"
+
         });
         
     }
