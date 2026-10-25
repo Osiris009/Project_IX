@@ -42,6 +42,7 @@ bool UIX_UISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 	return false;
 }
 
+
 void UIX_UISubsystem::RegisterCreatedPrimaryLayoutWidget(UWidget_PrimaryLayout* InCreatedWidget)
 {
 	check(InCreatedWidget);
@@ -50,6 +51,7 @@ void UIX_UISubsystem::RegisterCreatedPrimaryLayoutWidget(UWidget_PrimaryLayout* 
 	
 	/*Debug::Print(TEXT("Primary layout widget stored"));*/
 }
+
 
 void UIX_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag,
 	TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass,
@@ -83,6 +85,8 @@ void UIX_UISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetSta
 		)
 	);
 }
+
+
 
 void UIX_UISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMsg, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
 {
@@ -131,6 +135,7 @@ void UIX_UISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType InSc
 
 }
 
+
 void UIX_UISubsystem::PushConsumableWidgetToStack()
 {
 	PushSoftWidgetToStackAsync(
@@ -147,6 +152,6 @@ void UIX_UISubsystem::PushConsumableWidgetToStack()
 			
 		}
 	}
-);
+    );
 
 }

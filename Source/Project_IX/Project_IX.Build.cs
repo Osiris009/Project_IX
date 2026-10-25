@@ -20,8 +20,8 @@ public class Project_IX : ModuleRules
 			"GameplayTasks",
             "CommonInput",
             "EnhancedInput",
-            "PropertyPath"
-
+            "PropertyPath",
+            "PreLoadScreen"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[]
