@@ -59,5 +59,8 @@ private:
 	
 	void TryDisplayLoadingScreenIfNoon();
 	void TryRemoveLoadingScreen();
+	
+	void NotifyLoadingScreenVisibilityChanged(bool bIsVisible);
+	
 	TSharedPtr<SWidget> CachedCreatedLoadingScreenWidget;
 };

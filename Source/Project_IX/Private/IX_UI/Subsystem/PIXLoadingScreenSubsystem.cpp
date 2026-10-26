@@ -5,7 +5,7 @@
 #include "PreLoadScreenManager.h"
 #include "IXProjectSettings/PIXLoadingScreenSettings.h"
 #include "Blueprint/UserWidget.h"
-
+#include "IX_UI/PIXLoadingScreenInterface.h"
 
 bool UPIXLoadingScreenSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
@@ -109,11 +109,12 @@ void UPIXLoadingScreenSubsystem::TryUpdateLoadingScreen()
 	else
 	{
 		// try to remove the current active loading screen 
-		// Notify the loading screen is complete 
-		
-		// Disable tick 
+		// // Disable tick 
 		TryRemoveLoadingScreen();
 		HoldLoadingScreenStartUpTime = -1.0f;
+		
+		// Notify the loading screen is complete
+		NotifyLoadingScreenVisibilityChanged(false);
 		SetTickableTickType(ETickableTickType::Never);
 	}
 }
@@ -220,7 +221,7 @@ void UPIXLoadingScreenSubsystem::TryDisplayLoadingScreenIfNoon()
 		1000
 	);
 	
-	
+	NotifyLoadingScreenVisibilityChanged(true);
 }
 
 void UPIXLoadingScreenSubsystem::TryRemoveLoadingScreen()
@@ -231,4 +232,49 @@ void UPIXLoadingScreenSubsystem::TryRemoveLoadingScreen()
 	}
 	GetGameInstance()->GetGameViewportClient()->RemoveViewportWidgetContent(CachedCreatedLoadingScreenWidget.ToSharedRef());
 	CachedCreatedLoadingScreenWidget.Reset();
+	
+	
+}
+
+void UPIXLoadingScreenSubsystem::NotifyLoadingScreenVisibilityChanged(bool bIsVisible)
+{
+	for (ULocalPlayer* ExistingLocalPlayer : GetGameInstance()->GetLocalPlayers())
+	{
+		if (!ExistingLocalPlayer)
+		{
+			continue;
+		}
+		
+		if (APlayerController* PC = ExistingLocalPlayer->GetPlayerController(GetGameInstance()->GetWorld()))
+		{
+			//Query if player controller implements the interface. Call the function through interface to notify the loading status if yes
+			if (PC->Implements<UPIXLoadingScreenInterface>())
+			{
+				if (bIsVisible)
+				{
+					IPIXLoadingScreenInterface::Execute_OnLoadingScreenActivated(PC);
+				}
+				else
+				{
+					IPIXLoadingScreenInterface::Execute_OnLoadingScreenDeactivated(PC);
+				}
+			}
+			
+			if (APawn* OwningPawn = PC->GetPawn())
+			{
+				if (bIsVisible)
+				{
+					IPIXLoadingScreenInterface::Execute_OnLoadingScreenActivated(PC);
+				}
+				else
+				{
+					IPIXLoadingScreenInterface::Execute_OnLoadingScreenDeactivated(PC);
+				}
+			}
+			
+		}
+		
+		//The Code for notify other objects in the world can be implemented here
+		
+	}
 }
