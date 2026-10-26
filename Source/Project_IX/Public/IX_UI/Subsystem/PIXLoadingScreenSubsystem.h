@@ -56,4 +56,8 @@ private:
 	float HoldLoadingScreenStartUpTime = -1.0f;
 	
 	FString CurrentLoadingReason; 
+	
+	void TryDisplayLoadingScreenIfNoon();
+	void TryRemoveLoadingScreen();
+	TSharedPtr<SWidget> CachedCreatedLoadingScreenWidget;
 };

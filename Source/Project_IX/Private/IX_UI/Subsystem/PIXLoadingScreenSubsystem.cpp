@@ -4,6 +4,8 @@
 #include "IX_UI/Subsystem/PIXLoadingScreenSubsystem.h"
 #include "PreLoadScreenManager.h"
 #include "IXProjectSettings/PIXLoadingScreenSettings.h"
+#include "Blueprint/UserWidget.h"
+
 
 bool UPIXLoadingScreenSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
@@ -101,6 +103,7 @@ void UPIXLoadingScreenSubsystem::TryUpdateLoadingScreen()
 	if (ShouldShowLoadingScreen())
 	{
 		// Try display the loading Screen here 
+		TryDisplayLoadingScreenIfNoon();
 		OnLoadingReasonUpdated.Broadcast(CurrentLoadingReason);
 	}
 	else
@@ -109,11 +112,12 @@ void UPIXLoadingScreenSubsystem::TryUpdateLoadingScreen()
 		// Notify the loading screen is complete 
 		
 		// Disable tick 
-		
+		TryRemoveLoadingScreen();
+		HoldLoadingScreenStartUpTime = -1.0f;
 		SetTickableTickType(ETickableTickType::Never);
 	}
 }
-
+ 
 bool UPIXLoadingScreenSubsystem::IsPreLoadingScreenActive() const
 {
 	if(FPreLoadScreenManager* PreLoadScreenManager = FPreLoadScreenManager::Get())
@@ -191,4 +195,40 @@ bool UPIXLoadingScreenSubsystem::CheckTheNeedToShowLoadingScreen()
 	
 	
 	return false;
+}
+
+void UPIXLoadingScreenSubsystem::TryDisplayLoadingScreenIfNoon()
+{
+	//If there's already active loading Screen, return early if yes 
+	if (CachedCreatedLoadingScreenWidget)
+	{
+		return;
+	}
+	
+	const UPIXLoadingScreenSettings* LoadingScreenSettings = GetDefault<UPIXLoadingScreenSettings>();
+	
+	TSubclassOf<UUserWidget> LoadedWidgetClass = LoadingScreenSettings->GetLoadingScreenWidgetClassChecked();
+	
+	UUserWidget* CreatedWidget = UUserWidget::CreateWidgetInstance(*GetGameInstance(), LoadedWidgetClass, NAME_None);
+	
+	check(CreatedWidget);
+	
+	CachedCreatedLoadingScreenWidget = CreatedWidget->TakeWidget();
+	
+	GetGameInstance()->GetGameViewportClient()->AddViewportWidgetContent(
+		CachedCreatedLoadingScreenWidget.ToSharedRef(),
+		1000
+	);
+	
+	
+}
+
+void UPIXLoadingScreenSubsystem::TryRemoveLoadingScreen()
+{
+	if (!CachedCreatedLoadingScreenWidget)
+	{
+		return;
+	}
+	GetGameInstance()->GetGameViewportClient()->RemoveViewportWidgetContent(CachedCreatedLoadingScreenWidget.ToSharedRef());
+	CachedCreatedLoadingScreenWidget.Reset();
 }
