@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilityClasses/BaseGameplayAbility.h"
+#include "AbilitySystem/Abilities/BaseGameplayAbility.h"
 #include "GA_Attack.generated.h"
 
 
@@ -16,14 +16,14 @@ public:
 
 	UGA_Attack();
 
-	/*** Called when the ability is activated — this is where your ability logic goes ***/
+	/*** Called when the ability is activated ï¿½ this is where your ability logic goes ***/
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 		const FGameplayAbilityActorInfo* ActorInfo, 
 		const FGameplayAbilityActivationInfo ActivationInfo, 
 		const FGameplayEventData* TriggerEventData) 
 		override;
 
-	/*** Called when the ability ends — this is where you clean up any ongoing effects or state ***/
+	/*** Called when the ability ends ï¿½ this is where you clean up any ongoing effects or state ***/
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, 
 		const FGameplayAbilityActorInfo* ActorInfo, 
 		const FGameplayAbilityActivationInfo ActivationInfo, 

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilityClasses/BaseGameplayAbility.h"
-#include "AbilityClasses/PIXAbilitySystemComponent.h"
+#include "AbilitySystem/Abilities/BaseGameplayAbility.h"
+#include "AbilitySystem/PIXAbilitySystemComponent.h"
 
 
 UBaseGameplayAbility::UBaseGameplayAbility()

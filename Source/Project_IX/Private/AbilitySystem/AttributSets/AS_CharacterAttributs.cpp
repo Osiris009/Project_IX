@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilityClasses/AttributSets/AS_CharacterAttributs.h"
+#include "AbilitySystem/AttributSets/AS_CharacterAttributs.h"
 #include "Net/UnrealNetwork.h" // For Replication
 
 UAS_CharacterAttributs::UAS_CharacterAttributs()
 {
-	// Sensible defaults — real values typically come from a
+	// Sensible defaults ï¿½ real values typically come from a
    // GameplayEffect applied at spawn (we'll do this properly in 3.x Part 2)
 
 	InitHealth(100.f);
@@ -21,7 +21,7 @@ void UAS_CharacterAttributs::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 
 	// COND_None means: replicate to everyone who can see this actor.
 	// REPNOTIFY_Always means: fire the OnRep even if the value
-	// didn't visibly change (important — see explanation below).
+	// didn't visibly change (important ï¿½ see explanation below).
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAS_CharacterAttributs, Health, COND_None, REPNOTIFY_Always);
 
@@ -39,7 +39,7 @@ void UAS_CharacterAttributs::PreAttributeChange(const FGameplayAttribute& Attrib
 	Super::PreAttributeChange(Attribute, NewValue);
 
 	// Clamp CurrentValue here. This runs for BOTH permanent changes
-	// and temporary modifier changes — it's the universal safety net.
+	// and temporary modifier changes ï¿½ it's the universal safety net.
 
 	if(Attribute == GetHealthAttribute())
 	{

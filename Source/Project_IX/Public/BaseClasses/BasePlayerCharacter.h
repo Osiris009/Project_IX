@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "BaseClasses/PIXBaseCharacter.h"
 #include "InputActionValue.h"
 #include "AbilitySystemInterface.h"  
 #include "BasePlayerCharacter.generated.h"
@@ -30,7 +30,7 @@ enum class EGaitState : uint8
 
 
 UCLASS()
-class PROJECT_IX_API ABasePlayerCharacter : public ACharacter, public IAbilitySystemInterface
+class PROJECT_IX_API ABasePlayerCharacter : public APIXBaseCharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 

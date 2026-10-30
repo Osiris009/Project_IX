@@ -1,10 +1,11 @@
 
 
 
-#include "AbilityClasses/GA_Attack.h"
+#include "AbilitySystem/Abilities/GA_Attack.h"
+
+
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 #include "GameFramework/DamageType.h"
 
@@ -13,13 +14,13 @@ UGA_Attack::UGA_Attack()
     // Net Execution Policy — determines where this ability runs
    // LocalPredicted: Client predicts activation, server confirms
    // (Best for responsive combat in multiplayer)
-    NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
+   NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 }
 
 void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
-    const FGameplayAbilityActorInfo* ActorInfo, 
-    const FGameplayAbilityActivationInfo ActivationInfo, 
-    const FGameplayEventData* TriggerEventData)
+                                 const FGameplayAbilityActorInfo* ActorInfo, 
+                                 const FGameplayAbilityActivationInfo ActivationInfo, 
+                                 const FGameplayEventData* TriggerEventData)
 {
     // ALWAYS call Super or CommitAbility first
     // CommitAbility checks cost and cooldown, then "commits" the ability

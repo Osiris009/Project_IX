@@ -1,4 +1,3 @@
-      // Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BaseClasses/BasePlayerCharacter.h"
@@ -7,10 +6,10 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
-#include "AbilityClasses/PIXAbilitySystemComponent.h"
+#include "AbilitySystem/PIXAbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
-#include "AbilityClasses/PIXPlayerState.h"
-#include "AbilityClasses/AttributSets/AS_CharacterAttributs.h"
+#include "AbilitySystem/PIXPlayerState.h"
+#include "AbilitySystem/AttributSets/AS_CharacterAttributs.h"
 
 
 
@@ -77,7 +76,7 @@ void ABasePlayerCharacter::InitGas()
 
 	// This call tells the ASC who owns it (PlayerState) and who
    // is the visible avatar in the world (this Character).
-   // GAS uses both internally — Owner for replication,
+   // GAS uses both internally ï¿½ Owner for replication,
    // Avatar for targeting and animations.
 	PIXAbilitySystemComponent->InitAbilityActorInfo(PS, this);
 
@@ -85,7 +84,7 @@ void ABasePlayerCharacter::InitGas()
 
 void ABasePlayerCharacter::GrantDefaultAbilities()
 {
-	// Only grant on server — GAS replicates ability specs to clients
+	// Only grant on server ï¿½ GAS replicates ability specs to clients
 	if (!HasAuthority() || !PIXAbilitySystemComponent) return;
 
 
@@ -156,7 +155,7 @@ void ABasePlayerCharacter::Input_Attack_Pressed()
 {
 	if (!PIXAbilitySystemComponent) return;
 
-	// Activate by tag — this is the preferred AAA pattern.
+	// Activate by tag ï¿½ this is the preferred AAA pattern.
 	// You don't hardcode a class reference; you ask GAS to
 	// activate whatever ability has this tag.
 	FGameplayTagContainer TagContainer;

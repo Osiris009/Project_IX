@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilityClasses/PIXPlayerState.h"
-#include "AbilityClasses/PIXAbilitySystemComponent.h"
-#include "AbilityClasses/AttributSets/AS_CharacterAttributs.h"
+#include "AbilitySystem/PIXPlayerState.h"
+#include "AbilitySystem/PIXAbilitySystemComponent.h"
+#include "AbilitySystem/AttributSets/AS_CharacterAttributs.h"
 
 
 APIXPlayerState::APIXPlayerState()
