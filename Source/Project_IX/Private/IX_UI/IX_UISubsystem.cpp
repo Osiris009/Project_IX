@@ -42,7 +42,7 @@ bool UIX_UISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 	return false;
 }
 
-
+  
 void UIX_UISubsystem::RegisterCreatedPrimaryLayoutWidget(UWidget_PrimaryLayout* InCreatedWidget)
 {
 	check(InCreatedWidget);

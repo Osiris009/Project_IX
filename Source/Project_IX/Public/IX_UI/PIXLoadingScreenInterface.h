@@ -26,6 +26,6 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void OnLoadingScreenDeactivated();
-	//virtual void OnLoadingScreenDeactivated_Implementation() {}
+	
 	
 };

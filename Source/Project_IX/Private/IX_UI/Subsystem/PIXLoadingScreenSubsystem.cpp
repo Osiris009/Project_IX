@@ -262,13 +262,16 @@ void UPIXLoadingScreenSubsystem::NotifyLoadingScreenVisibilityChanged(bool bIsVi
 			
 			if (APawn* OwningPawn = PC->GetPawn())
 			{
-				if (bIsVisible)
+				if (OwningPawn->Implements<UPIXLoadingScreenInterface>())
 				{
-					IPIXLoadingScreenInterface::Execute_OnLoadingScreenActivated(PC);
-				}
-				else
-				{
-					IPIXLoadingScreenInterface::Execute_OnLoadingScreenDeactivated(PC);
+					if (bIsVisible)
+					{
+						IPIXLoadingScreenInterface::Execute_OnLoadingScreenActivated(OwningPawn);
+					}
+					else
+					{
+						IPIXLoadingScreenInterface::Execute_OnLoadingScreenDeactivated(OwningPawn);
+					}
 				}
 			}
 			
